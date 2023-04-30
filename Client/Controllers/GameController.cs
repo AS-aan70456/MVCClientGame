@@ -11,13 +11,15 @@ using SFML.Window;
 namespace Client.Controllers{
     class GameController : IDrawController{
 
-        GameView View;
+        private GameView View;
 
-        ReyCastService reyCast;
+        private ReyCastService reyCast;
 
-        Maps maps;
-        List<Enemy> enemy;
-        Player player;
+        private Maps maps;
+        private List<Enemy> enemy;
+        private Player player;
+
+        private Vector2i MousePosition;
 
         public void Activation(RenderWindow window){
             maps = new Maps();
@@ -26,7 +28,11 @@ namespace Client.Controllers{
             reyCast = new ReyCastService(maps);
 
             View = new GameView(window, reyCast, maps, player, enemy);
+
+            MousePosition = Mouse.GetPosition();
+            window.MouseMoved += new EventHandler<MouseMoveEventArgs>(MouseMoved);
         }
+
 
         public void Draw(){
             View.Render();
@@ -34,17 +40,25 @@ namespace Client.Controllers{
 
         public void Updata(){
             if (Keyboard.IsKeyPressed(Keyboard.Key.W))
-                player.Position += new Vector2f((float)(Math.Cos(((player.angle * Math.PI) / 180)) * 0.5), (float)(Math.Sin(((player.angle * Math.PI) / 180)) * 0.5));
+                player.Position += new Vector2f((float)(Math.Cos(((player.angle * Math.PI) / 180)) * 0.2), (float)(Math.Sin(((player.angle * Math.PI) / 180)) * 0.2));
             if (Keyboard.IsKeyPressed(Keyboard.Key.S))
-                player.Position -= new Vector2f((float)(Math.Cos(((player.angle * Math.PI) / 180)) * 0.5), (float)(Math.Sin(((player.angle * Math.PI) / 180)) * 0.5));
+                player.Position -= new Vector2f((float)(Math.Cos(((player.angle * Math.PI) / 180)) * 0.2), (float)(Math.Sin(((player.angle * Math.PI) / 180)) * 0.2));
             if (Keyboard.IsKeyPressed(Keyboard.Key.A))
-                player.Position -= new Vector2f(0.5f, 0);
+                player.Position += new Vector2f((float)(Math.Cos((((player.angle + 90) * Math.PI) / 180)) * 0.2), (float)(Math.Sin((((player.angle + 90) * Math.PI) / 180)) * 0.2));
             if (Keyboard.IsKeyPressed(Keyboard.Key.D))
-                player.Position += new Vector2f(0.5f, 0);
+                player.Position -= new Vector2f((float)(Math.Cos((((player.angle + 90) * Math.PI) / 180)) * 0.2), (float)(Math.Sin((((player.angle + 90) * Math.PI) / 180)) * 0.2));
             if (Keyboard.IsKeyPressed(Keyboard.Key.Q))
-                player.angle += 0.9f;
+                player.angle += 1.2f;
             if (Keyboard.IsKeyPressed(Keyboard.Key.E))
-                player.angle -= 0.9f;
+                player.angle -= 1.2f;
+        }
+
+        private void MouseMoved(object sender, MouseMoveEventArgs @event) {
+            player.angle += (( MousePosition.X - @event.X) * 0.6f);
+
+            RenderWindow render = (RenderWindow)sender;
+            MousePosition = new Vector2i(@event.X, @event.Y);
+            //Mouse.SetPosition(render.Position + (Vector2i)(render.Size / 2));
 
         }
 
