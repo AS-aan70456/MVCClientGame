@@ -24,7 +24,7 @@ namespace Client.Controllers{
         public void Activation(RenderWindow window){
             maps = new Maps();
             enemy = new List<Enemy>();
-            player = new Player(new Vector2f(15, 7), 45);
+            player = new Player(new Vector2f(13.5f, 5.5f), 1);
             reyCast = new ReyCastService(maps);
 
             View = new GameView(window, reyCast, maps, player, enemy);
@@ -54,7 +54,7 @@ namespace Client.Controllers{
         }
 
         private void MouseMoved(object sender, MouseMoveEventArgs @event) {
-            player.angle += (( MousePosition.X - @event.X) * 0.6f);
+            //player.angle += (( MousePosition.X - @event.X) * 0.6f);
 
             RenderWindow render = (RenderWindow)sender;
             MousePosition = new Vector2i(@event.X, @event.Y);
