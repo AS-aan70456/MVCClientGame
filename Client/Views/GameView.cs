@@ -42,7 +42,7 @@ namespace Client.Views
 
         public void Render(){
 
-            Rey[] reyCastModel = reyCast.ReyCastWall(player, 70, 16, 550);
+            Rey[] reyCastModel = reyCast.ReyCastWall(player, 70, 16, 1080);
             for (int i = 0; i < reyCastModel.Length; i++){
                 DrawWall(reyCastModel[i], reyCastModel.Length, i);
             }

@@ -30,24 +30,29 @@ namespace Services{
 
             if (MathF.Sin((angle * MathF.PI) / 180) > 0) {
                 if (MathF.Cos((angle * MathF.PI) / 180) > 0) {
-                    ReyVertical = ReyPushStrategy(new LeftRey(), Position, angle + 90);
+                    ReyVertical = ReyPushStrategy(new LeftRey(), Position, -(angle + 90));
                     ReyHorizontal = ReyPushStrategy(new TopRey(), Position, angle);
                 }
                 else {
                     ReyVertical = ReyPushStrategy(new TopRey(), Position, angle);
-                    ReyHorizontal = ReyPushStrategy(new RightRey(), Position, angle - 90);
+                    ReyHorizontal = ReyPushStrategy(new RightRey(), Position, -(angle - 90));
                 }
             }
             else {
                 if (MathF.Cos((angle * MathF.PI) / 180) < 0){
-                     ReyVertical = ReyPushStrategy(new RightRey(), Position, angle - 90);
+                     ReyVertical = ReyPushStrategy(new RightRey(), Position, -(angle - 90));
                      ReyHorizontal = ReyPushStrategy(new DownRey(), Position, angle - 180);
                 }
                 else{
                     ReyVertical = ReyPushStrategy(new DownRey(), Position, angle - 180);
-                    ReyHorizontal = ReyPushStrategy(new LeftRey(), Position, angle + 90);
+                    ReyHorizontal = ReyPushStrategy(new LeftRey(), Position, -(angle + 90));
                 }
             }
+
+            //return new Rey[] {
+            //    ReyPushStrategy(new LeftRey(), Position,-angle ),
+            //    ReyPushStrategy(new TopRey(), Position, angle)
+            //};
 
             if (ReyVertical.ReyDistance < ReyHorizontal.ReyDistance)
                 return ReyVertical;
@@ -62,7 +67,7 @@ namespace Services{
 
             for (int i = 0; i < 64; i++){
 
-                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X > map.Size.X || ReyPos.Y > map.Size.Y){
+                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X >= map.Size.X || ReyPos.Y >= map.Size.Y){
                     result.ReyDistance = 1512;
                     result.ReyPoint = ReyPos;
                     return result;
@@ -105,20 +110,22 @@ namespace Services{
         public Vector2f StartReyPos(Vector2f Position, float angle){
 
             Vector2f deltePosition = new Vector2f(){
-                X = 1 - (Position.X - (int)Position.X),
-                Y = 1 - (Position.Y - (int)Position.Y)
+                X = (Position.X - (int)Position.X),
+                Y = (Position.Y - (int)Position.Y)
             };
 
-            Position.X += deltePosition.X;
-            Position.Y += ((deltePosition.X) / MathF.Tan((-angle * MathF.PI) / 180));
+            Position.X += -deltePosition.X;
+            Position.Y += ((-deltePosition.X) / MathF.Tan((angle * MathF.PI) / 180));
+
+            Position -= new Vector2f(0.00001f, 0.00001f);
 
             return Position;
         }
 
         public Vector2f NextReyPos(float angle){
             return new Vector2f(
-                -1.0001f,
-                -(1.0001f / MathF.Tan((-angle * MathF.PI) / 180))
+                -1f,
+                -(1f / MathF.Tan((angle * MathF.PI) / 180))
             );
         }
 
@@ -131,20 +138,22 @@ namespace Services{
 
         public Vector2f StartReyPos(Vector2f Position, float angle){
             Vector2f deltePosition = new Vector2f(){
-                X = 1 - (Position.X - (int)Position.X),
-                Y = 1 - (Position.Y - (int)Position.Y),
+                X = (Position.X - (int)Position.X),
+                Y = (Position.Y - (int)Position.Y),
             };
 
-            Position.X += ((deltePosition.Y) / MathF.Tan((angle * MathF.PI) / 180));
-            Position.Y += deltePosition.Y;
-            
+            Position.X += ((-deltePosition.Y) / MathF.Tan((angle * MathF.PI) / 180));
+            Position.Y += -deltePosition.Y;
+
+            Position -= new Vector2f(0.00001f, 0.00001f);
+
             return Position;
         }
 
         public Vector2f NextReyPos(float angle){
             return new Vector2f(
-                -(1.0001f / MathF.Tan((angle * MathF.PI) / 180)),
-                -1.0001f
+                -(1f / MathF.Tan((angle * MathF.PI) / 180)),
+                -1f
             );
         }
 
@@ -158,20 +167,20 @@ namespace Services{
 
         public Vector2f StartReyPos(Vector2f Position, float angle){
             Vector2f deltePosition = new Vector2f(){
-                X = Position.X - (int)Position.X,
-                Y = Position.Y - (int)Position.Y,
+                X = 1 - (Position.X - (int)Position.X),
+                Y = 1 - (Position.Y - (int)Position.Y),
             };
 
-            Position.X -= deltePosition.X;
-            Position.Y -= ((deltePosition.X) / MathF.Tan((-angle * MathF.PI) / 180));
-            
+            Position.X -= (-deltePosition.X);
+            Position.Y -= (((-deltePosition.X)) / MathF.Tan((angle * MathF.PI) / 180));
+
             return Position;
         }
 
         public Vector2f NextReyPos(float angle){
             return new Vector2f(
                 1f,
-                (1f / MathF.Tan((-angle * MathF.PI) / 180))
+                (1f / MathF.Tan((angle * MathF.PI) / 180))
             );
         }
 
@@ -183,14 +192,13 @@ namespace Services{
     class DownRey : IStrategyReyCanculate{
 
         public Vector2f StartReyPos(Vector2f Position, float angle){
-            Vector2f deltePosition = new Vector2f()
-            {
-                X = Position.X - (int)Position.X,
-                Y = Position.Y - (int)Position.Y,
+            Vector2f deltePosition = new Vector2f(){
+                X = 1 - (Position.X - (int)Position.X),
+                Y = 1 - (Position.Y - (int)Position.Y),
             };
 
-            Position.X -= ((deltePosition.Y) / MathF.Tan((angle * MathF.PI) / 180));
-            Position.Y -= deltePosition.Y;
+            Position.X -= (((-deltePosition.Y)) / MathF.Tan((angle * MathF.PI) / 180));
+            Position.Y -= (-deltePosition.Y);
 
             return Position;
         }
