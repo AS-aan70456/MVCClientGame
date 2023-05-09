@@ -18,6 +18,7 @@ namespace Services{
             for (int i = 0; i < CountRey; i++){
                 float ReyAngle = (entity.angle + fov / 2 - i * fov / CountRey);
                 result[i] = ReyPush(entity.Position, ReyAngle, depth);
+                //result[i].ReyDistance /= MathF.Cos(i/fov);
             }
 
             return result;
