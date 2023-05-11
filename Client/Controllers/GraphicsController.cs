@@ -20,9 +20,12 @@ namespace Client.Controllers{
 
         }
 
-        public void SetController(IDrawController gameController){
+        public void SetController(IDrawController gameController) {
+            if (this.gameController != null)
+                this.gameController.DizActivation();
+
             this.gameController = gameController;
-            gameController.Activation(window);
+            this.gameController.Activation(window);
             Updata();
         }
 

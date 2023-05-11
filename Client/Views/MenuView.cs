@@ -78,8 +78,8 @@ namespace Client.Views{
             ExitButton.Text.FillColor = new Color(122, 68, 74);
             ExitButton.Text.CharacterSize = 64;
 
-            window.MouseButtonPressed += new EventHandler<MouseButtonEventArgs>(MousePressed);
-            window.MouseButtonReleased += new EventHandler<MouseButtonEventArgs>(MouseReleased);
+            window.MouseButtonPressed += MousePressed;
+            window.MouseButtonReleased += MouseReleased;
         }
 
         public void Render(){
@@ -110,6 +110,11 @@ namespace Client.Views{
 
         private void MouseReleased(object sender, MouseButtonEventArgs @event){
 
+        }
+
+        public void DizActivation(){
+            window.MouseButtonPressed -= MousePressed;
+            window.MouseButtonReleased -= MouseReleased;
         }
     }
 }

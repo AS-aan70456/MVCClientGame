@@ -2,6 +2,7 @@
 using Client.Views;
 using Client.Interfeices;
 using SFML.Graphics;
+using SFML.Window;
 
 namespace Client.Controllers{
     class MenuController : IDrawController{
@@ -11,6 +12,10 @@ namespace Client.Controllers{
         public void Activation(RenderWindow window){
             View = new MenuView(window);
 
+        }
+
+        public void DizActivation() {
+            View.DizActivation();
         }
 
         public void Draw(){

@@ -11,6 +11,7 @@ namespace Client.Interfeices{
          void Draw();
          void Updata();
          void Activation(RenderWindow window);
+         void DizActivation();
 
     }
 }

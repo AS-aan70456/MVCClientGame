@@ -84,21 +84,21 @@ namespace Client.Controllers{
             Console.WriteLine("D : " + Button[5]);
 
             if (Button[0] == true)
-                player.Position -= new Vector2f((float)(Math.Cos(((player.angle * Math.PI) / 180)) * 0.2), (float)(Math.Sin(((player.angle * Math.PI) / 180)) * 0.2));
+                player.Move(new Vector2f(0.1f, 0)); ; 
             if (Button[1] == true)
-                player.Position += new Vector2f((float)(Math.Cos(((player.angle * Math.PI) / 180)) * 0.2), (float)(Math.Sin(((player.angle * Math.PI) / 180)) * 0.2));
+                player.Move(new Vector2f(-0.1f, 0)); //+= new Vector2f((float)(Math.Cos(((player.angle * Math.PI) / 180)) * 0.2), (float)(Math.Sin(((player.angle * Math.PI) / 180)) * 0.2));
             if (Button[2] == true)
-                player.Position -= new Vector2f((float)(Math.Cos((((player.angle + 90) * Math.PI) / 180)) * 0.2), (float)(Math.Sin((((player.angle + 90) * Math.PI) / 180)) * 0.2));
+                player.Move(new Vector2f(0, 0.1f)); //-= new Vector2f((float)(Math.Cos((((player.angle + 90) * Math.PI) / 180)) * 0.2), (float)(Math.Sin((((player.angle + 90) * Math.PI) / 180)) * 0.2));
             if (Button[3] == true)
-                player.Position += new Vector2f((float)(Math.Cos((((player.angle + 90) * Math.PI) / 180)) * 0.2), (float)(Math.Sin((((player.angle + 90) * Math.PI) / 180)) * 0.2));
+                player.Move(new Vector2f(0, -0.1f));// += new Vector2f((float)(Math.Cos((((player.angle + 90) * Math.PI) / 180)) * 0.2), (float)(Math.Sin((((player.angle + 90) * Math.PI) / 180)) * 0.2));
             if (Button[4] == true)
-                player.angle += 1.2f;
+                player.Rotate(1.2f);
             if (Button[5] == true)
-                player.angle -= 1.2f;
+                player.Rotate(-1.2f);
         }
 
         private void MouseMoved(object sender, MouseMoveEventArgs @event) {
-            player.angle += (( MousePosition.X - @event.X) * 0.6f);
+            player.Rotate(( MousePosition.X - @event.X) * 0.6f);
 
             RenderWindow render = (RenderWindow)sender;
             MousePosition = new Vector2i(@event.X, @event.Y);
@@ -106,5 +106,10 @@ namespace Client.Controllers{
 
         }
 
+        public void DizActivation() {
+            View.window.MouseMoved -= new EventHandler<MouseMoveEventArgs>(MouseMoved);
+            View.window.KeyPressed -= new EventHandler<KeyEventArgs>(KeyPressed);
+            View.window.KeyReleased -= new EventHandler<KeyEventArgs>(KeyReleased);
+        }
     }
 }
