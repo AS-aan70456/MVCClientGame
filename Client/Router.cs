@@ -8,6 +8,8 @@ namespace Client{
     class Router{
         private RenderWindow window;
 
+        public bool IsOpen { get { return window.IsOpen; } }
+
         public GraphicsController graphicsControllers { get; }
         public PlayersController playersControl { get; }
 

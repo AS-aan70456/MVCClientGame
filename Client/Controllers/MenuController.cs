@@ -9,7 +9,6 @@ namespace Client.Controllers{
         MenuView View;
 
         public void Activation(RenderWindow window){
-
             View = new MenuView(window);
 
         }
@@ -19,7 +18,7 @@ namespace Client.Controllers{
         }
 
         public void Updata() {
-        
+            
         }
     }
 }

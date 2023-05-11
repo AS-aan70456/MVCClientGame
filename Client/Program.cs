@@ -8,8 +8,9 @@ namespace Client{
     class Program{
         static void Main(string[] args){
             Router router = Router.Init();
-            router.graphicsControllers.SetController(new GameController());
+            router.graphicsControllers.SetController(new MenuController());
 
+            Console.WriteLine("Oh nooooo!");
             Console.Read();
         }
     }

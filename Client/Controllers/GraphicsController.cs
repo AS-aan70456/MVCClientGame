@@ -27,13 +27,16 @@ namespace Client.Controllers{
         }
 
         private void Updata() {
-            while (true) {
+            Router router = Router.Init();
+
+            while (router.IsOpen) {
                 window.Clear();
 
                 gameController.Draw();
+                gameController.Updata();
+
                 window.Display();
                 window.DispatchEvents();
-                gameController.Updata();
             }
         }
 

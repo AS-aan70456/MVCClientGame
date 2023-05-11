@@ -26,7 +26,7 @@ namespace Client.Controllers{
         public void Activation(RenderWindow window){
             maps = new Maps();
             enemy = new List<Enemy>();
-            player = new Player(new Vector2f(11.5f, 2.5f), 1);
+            player = new Player(new Vector2f(11.5f, 3.5f), 1);
             reyCast = new ReyCastService(maps);
 
             View = new GameView(window, reyCast, maps, player, enemy);

@@ -1,5 +1,6 @@
 ﻿using Client.Interfeices;
 using Client.Models;
+using Client.Services;
 using Services;
 using SFML.Graphics;
 using SFML.System;
@@ -12,7 +13,7 @@ namespace Client.Views
     class GameView : IRender
     {
 
-        public RenderWindow window { get; set; }
+        public RenderWindow window { get; private set; }
 
         private ReyCastService reyCast;
         private List<Enemy> entities;
@@ -33,11 +34,11 @@ namespace Client.Views
             this.entities = entities;
             this.map = map;
 
-            Walss2 = new Texture(AppDomain.CurrentDomain.BaseDirectory + @"Resurces\Img\Walss\Wall.png");
-            Walss = new Texture(AppDomain.CurrentDomain.BaseDirectory + @"Resurces\Img\Walss\Wall2.png");
-            Window = new Texture(AppDomain.CurrentDomain.BaseDirectory + @"Resurces\Img\Walss\Window.png");
-            Door = new Texture(AppDomain.CurrentDomain.BaseDirectory + @"Resurces\Img\Walss\Door.png");
-            DoorOpen = new Texture(AppDomain.CurrentDomain.BaseDirectory + @"Resurces\Img\Walss\DoorOpen.png");
+            Walss2 = ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Wall.png"); 
+            Walss = ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Wall2.png");
+            Window = ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Window.png"); 
+            Door = ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Door.png"); 
+            DoorOpen = ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\DoorOpen.png");
         }
 
         public void Render(){
@@ -73,11 +74,10 @@ namespace Client.Views
             }
             window.Draw(vertexArray);
 
-            RectangleShape circle = new RectangleShape(new Vector2f(10, 10));
-            circle.Rotation = player.angle;
-            circle.Position = (player.Position * 10) - new Vector2f(5, 5);
-            circle.FillColor = Color.Yellow;
-            window.Draw(circle);
+            RectangleShape rect = new RectangleShape(new Vector2f(10, 10));
+            rect.Position = (player.Position * 10) - new Vector2f(5, 5);
+            rect.FillColor = Color.Yellow;
+            window.Draw(rect);
         }
 
     
