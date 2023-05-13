@@ -1,6 +1,7 @@
 ﻿using System;
 using Client.Controllers;
 using Client.Interfeices;
+using Client.Models;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -13,6 +14,8 @@ namespace Client{
         public GraphicsController graphicsControllers { get; }
         public PlayersController playersControl { get; }
 
+        public Maps maps { get; private set; }
+
         private static Router router = null;
 
         private Router() {
@@ -20,6 +23,8 @@ namespace Client{
 
             graphicsControllers = new GraphicsController(window);
             playersControl = new PlayersController();
+
+            maps = new Maps();
         }
 
         public static Router Init() {

@@ -4,9 +4,9 @@ using Client.Models;
 using SFML.Graphics;
 using System;
 using System.Collections.Generic;
-using Services;
 using SFML.System;
 using SFML.Window;
+using Client.Services;
 
 namespace Client.Controllers{
     class GameController : IDrawController{
@@ -17,19 +17,19 @@ namespace Client.Controllers{
 
         private ReyCastService reyCast;
 
-        private Maps maps;
         private List<Enemy> enemy;
         private Player player;
 
         private Vector2i MousePosition;
 
         public void Activation(RenderWindow window){
-            maps = new Maps();
-            enemy = new List<Enemy>();
-            player = new Player(new Vector2f(11.5f, 3.5f), 1);
-            reyCast = new ReyCastService(maps);
 
-            View = new GameView(window, reyCast, maps, player, enemy);
+            enemy = new List<Enemy>();
+            player = new Player(new Vector2f(11.5f, 3.5f), new Vector2f(0.5f, 0.5f), 1);
+
+            reyCast = new ReyCastService();
+
+            View = new GameView(window, reyCast, player, enemy);
 
             Button = new bool[6];
 
@@ -75,26 +75,20 @@ namespace Client.Controllers{
         }
     
         public void Updata(){
-            Console.Clear();
-            Console.WriteLine("W : " + Button[0]);
-            Console.WriteLine("S : " + Button[1]);
-            Console.WriteLine("A : " + Button[2]);
-            Console.WriteLine("D : " + Button[3]);
-            Console.WriteLine("Q : " + Button[4]);
-            Console.WriteLine("D : " + Button[5]);
 
             if (Button[0] == true)
-                player.Move(new Vector2f(0.1f, 0)); ; 
+                player.Move(new Vector2f(0.1f, 0));
             if (Button[1] == true)
-                player.Move(new Vector2f(-0.1f, 0)); //+= new Vector2f((float)(Math.Cos(((player.angle * Math.PI) / 180)) * 0.2), (float)(Math.Sin(((player.angle * Math.PI) / 180)) * 0.2));
+                player.Move(new Vector2f(-0.1f, 0));
             if (Button[2] == true)
-                player.Move(new Vector2f(0, 0.1f)); //-= new Vector2f((float)(Math.Cos((((player.angle + 90) * Math.PI) / 180)) * 0.2), (float)(Math.Sin((((player.angle + 90) * Math.PI) / 180)) * 0.2));
+                player.Move(new Vector2f(0, 0.1f));
             if (Button[3] == true)
-                player.Move(new Vector2f(0, -0.1f));// += new Vector2f((float)(Math.Cos((((player.angle + 90) * Math.PI) / 180)) * 0.2), (float)(Math.Sin((((player.angle + 90) * Math.PI) / 180)) * 0.2));
+                player.Move(new Vector2f(0, -0.1f));
             if (Button[4] == true)
                 player.Rotate(1.2f);
             if (Button[5] == true)
                 player.Rotate(-1.2f);
+            
         }
 
         private void MouseMoved(object sender, MouseMoveEventArgs @event) {

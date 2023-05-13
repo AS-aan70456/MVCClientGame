@@ -12,7 +12,9 @@ namespace Client.Models{
         public string Map { get; private set; }
         private char[] Void;
         private char[] Transparent;
+        private char[] Collision;
 
+        public char this[int i,int j] { get { return Map[(int)i * Size.X + (int)j]; } }
 
         public Maps() {
             Size = new Vector2i(24, 15);
@@ -36,6 +38,7 @@ namespace Client.Models{
 
             Void = new char[] { ' ' };
             Transparent = new char[] { '3', '5' };
+            Collision = new char[] { '1', '2', '3', '4' };
         }
 
         // # 1 - wall
@@ -57,5 +60,8 @@ namespace Client.Models{
             for (int i = 0; i < Transparent.Length; i++) if (Cell == Transparent[i]) return true; return false;
         }
 
+        public bool IsCollision(char Cell){
+            for (int i = 0; i < Collision.Length; i++) if (Cell == Collision[i]) return true; return false;
+        }
     }
 }

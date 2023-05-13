@@ -3,13 +3,11 @@ using SFML.System;
 using System;
 using System.Collections.Generic;
 
-namespace Services{
+namespace Client.Services{
     class ReyCastService{
 
-        private Maps map;
-
-        public ReyCastService(Maps map){
-            this.map = map;
+        public ReyCastService(){
+            
         }
 
         public Rey[] ReyCastWall(Entity entity, float fov, float depth, int CountRey){
@@ -17,7 +15,7 @@ namespace Services{
 
             for (int i = 0; i < CountRey; i++){
                 float ReyAngle = (entity.angle + fov / 2 - i * fov / CountRey);
-                result[i] = ReyPush(entity.Position, ReyAngle, depth);
+                result[i] = ReyPush(entity.Position + (entity.Size / 2), ReyAngle, depth);
                 //result[i].ReyDistance /= MathF.Cos(i/fov);
             }
 
@@ -62,21 +60,22 @@ namespace Services{
         }
 
         private Rey ReyPushStrategy(IStrategyReyCanculate strategy, Vector2f Position, float angle){
+            Router router = Router.Init();
             Rey result = new Rey();
 
             Vector2f ReyPos = strategy.StartReyPos(Position, angle);
 
             for (int i = 0; i < 64; i++){
 
-                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X >= map.Size.X || ReyPos.Y >= map.Size.Y){
+                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X >= router.maps.Size.X || ReyPos.Y >= router.maps.Size.Y){
                     result.ReyDistance = 1512;
                     result.ReyPoint = ReyPos;
                     return result;
                 }
 
-                result.Wall = map.Map[(int)ReyPos.Y * map.Size.X + (int)ReyPos.X]; 
+                result.Wall = router.maps.Map[(int)ReyPos.Y * router.maps.Size.X + (int)ReyPos.X]; 
 
-                if (!map.IsVoid(result.Wall)){
+                if (!router.maps.IsVoid(result.Wall)){
 
                     result.offset = strategy.GetOfset(ReyPos);
 

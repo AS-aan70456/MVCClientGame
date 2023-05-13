@@ -1,7 +1,6 @@
 ﻿using Client.Interfeices;
 using Client.Models;
 using Client.Services;
-using Services;
 using SFML.Graphics;
 using SFML.System;
 using System;
@@ -17,7 +16,6 @@ namespace Client.Views
 
         private ReyCastService reyCast;
         private List<Enemy> entities;
-        private Maps map;
         private Player player;
 
         Texture Walss;
@@ -26,13 +24,11 @@ namespace Client.Views
         Texture Door;
         Texture DoorOpen;
 
-        public GameView(RenderWindow window, ReyCastService reyCast, Maps map, Player player, List<Enemy> entities)
-        {
+        public GameView(RenderWindow window, ReyCastService reyCast, Player player, List<Enemy> entities){
             this.window = window;
             this.reyCast = reyCast;
             this.player = player;
             this.entities = entities;
-            this.map = map;
 
             Walss2 = ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Wall.png"); 
             Walss = ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Wall2.png");
@@ -42,40 +38,39 @@ namespace Client.Views
         }
 
         public void Render(){
+            Router router = Router.Init();
 
             Rey[] reyCastModel = reyCast.ReyCastWall(player, 70, 16, 1080);
             for (int i = 0; i < reyCastModel.Length; i++){
                 DrawWall(reyCastModel[i], reyCastModel.Length, i);
             }
 
-            for (int i = 0; i < this.map.Size.X; i++){
-                for (int j = 0; j < this.map.Size.Y; j++){
+            for (int i = 0; i < router.maps.Size.X; i++){
+                for (int j = 0; j < router.maps.Size.Y; j++){
                     RectangleShape rectangle = new RectangleShape(new Vector2f(10, 10));
                     rectangle.Position = new Vector2f(10 * i, 10 * j);
                     rectangle.FillColor = Color.Black;
-                    if (map.Map[i + (j * this.map.Size.X)] != ' ')
+                    if (router.maps.Map[i + (j * router.maps.Size.X)] != ' ')
                         rectangle.FillColor = Color.Green;
-                    window.Draw(rectangle);
+                    if (router.maps.Map[i + (j * router.maps.Size.X)] == '5')
+                        rectangle.FillColor = Color.Red;
 
+                    window.Draw(rectangle);
                 }
             }
 
+            VertexArray vertexArray = new VertexArray(PrimitiveType.TriangleFan);
 
-
-            VertexArray vertexArray = new VertexArray(PrimitiveType.LineStrip);
-
-            vertexArray.Append(new Vertex(player.Position * 10));
-            for (int i = 0; i < reyCastModel.Length; i++)
-            {
+            vertexArray.Append(new Vertex((player.Position + (player.Size / 2)) * 10));
+            for (int i = 0; i < reyCastModel.Length; i++){
                 Vertex newVertex = new Vertex(reyCastModel[i].ReyPoint * 10);
-                newVertex.Color = new Color(255, 255, 255, 200);
+                newVertex.Color = new Color(255, 255, 255, 255);
                 vertexArray.Append(newVertex);
-                vertexArray.Append(new Vertex(player.Position * 10));
             }
             window.Draw(vertexArray);
 
-            RectangleShape rect = new RectangleShape(new Vector2f(10, 10));
-            rect.Position = (player.Position * 10) - new Vector2f(5, 5);
+            RectangleShape rect = new RectangleShape(new Vector2f(player.Size.X * 10, player.Size.Y * 10));
+            rect.Position = (player.Position * 10);
             rect.FillColor = Color.Yellow;
             window.Draw(rect);
         }
@@ -114,7 +109,7 @@ namespace Client.Views
                (window.Size.Y / 2) * (1 - (1 / reyCast.ReyDistance))
             );
 
-            int brightness = ((int)(255 - (reyCast.ReyDistance * 20)));
+            int brightness = ((int)(255 - (reyCast.ReyDistance * 10)));
 
             if (brightness < 0) brightness = 0;
             if (brightness > 255) brightness = 255;
