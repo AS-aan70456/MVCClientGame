@@ -20,21 +20,19 @@ namespace Client.Models{
             Size = new Vector2i(24, 15);
             Map += "111111111121111111111211";
             Map += "1              1       1";
-            Map += "2              2       1";
+            Map += "2              5       1";
             Map += "1              4       1";
             Map += "1              1       1";
             Map += "112132112111511112   211";
-            Map += "1                      1";
-            Map += "2                      1";
-            Map += "1      12              1";
-            Map += "1                      1";
-            Map += "2                      2";
+            Map += "1        1             1";
+            Map += "2        3             1";
+            Map += "1        1             1";
+            Map += "1        1             1";
+            Map += "2111512111             2";
             Map += "1                      1";
             Map += "1                      1";
             Map += "1                      1";
             Map += "111111211111411112211111";
-
-
 
             Void = new char[] { ' ' };
             Transparent = new char[] { '3', '5' };
