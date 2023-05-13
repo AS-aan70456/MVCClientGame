@@ -3,55 +3,49 @@ using SFML.System;
 using System;
 using System.Collections.Generic;
 
-namespace Client.Services{
-    class ReyCastService{
+namespace Client.Services {
+    class ReyCastService {
 
-        public ReyCastService(){
-            
-        }
-
-        public Rey[] ReyCastWall(Entity entity, float fov, float depth, int CountRey){
+        public Rey[] ReyCastWall(Entity entity, float fov, float depth, int CountRey) {
             Rey[] result = new Rey[CountRey];
 
-            for (int i = 0; i < CountRey; i++){
+            for (int i = 0; i < CountRey; i++) {
                 float ReyAngle = (entity.angle + fov / 2 - i * fov / CountRey);
-                result[i] = ReyPush(entity.Position + (entity.Size / 2), ReyAngle, depth);
+                result[i] = ReyPush(entity.Position + (entity.Size / 2), ReyAngle);
                 //result[i].ReyDistance /= MathF.Cos(i/fov);
             }
 
             return result;
         }
 
-        private Rey ReyPush( Vector2f Position, float angle, float depth){
+        private Rey ReyPush(Vector2f Position, float angle) {
 
             Rey ReyVertical = new Rey();
             Rey ReyHorizontal = new Rey();
 
             if (MathF.Sin((angle * MathF.PI) / 180) > 0) {
                 if (MathF.Cos((angle * MathF.PI) / 180) > 0) {
-                    ReyVertical = ReyPushStrategy(new LeftRey(), Position, -(angle + 90));
-                    ReyHorizontal = ReyPushStrategy(new TopRey(), Position, angle);
+                    ReyVertical = ReyPushStrategy(new LeftRey(), Position, -(angle + 90), angle);
+                    ReyHorizontal = ReyPushStrategy(new TopRey(), Position, angle, angle);
                 }
                 else {
-                    ReyVertical = ReyPushStrategy(new TopRey(), Position, angle);
-                    ReyHorizontal = ReyPushStrategy(new RightRey(), Position, -(angle - 90));
+                    ReyVertical = ReyPushStrategy(new TopRey(), Position, angle, angle);
+                    ReyHorizontal = ReyPushStrategy(new RightRey(), Position, -(angle - 90), angle);
                 }
             }
             else {
-                if (MathF.Cos((angle * MathF.PI) / 180) < 0){
-                     ReyVertical = ReyPushStrategy(new RightRey(), Position, -(angle - 90));
-                     ReyHorizontal = ReyPushStrategy(new DownRey(), Position, angle - 180);
+                if (MathF.Cos((angle * MathF.PI) / 180) < 0) {
+                    ReyVertical = ReyPushStrategy(new RightRey(), Position, -(angle - 90), angle);
+                    ReyHorizontal = ReyPushStrategy(new DownRey(), Position, angle - 180, angle);
                 }
-                else{
-                    ReyVertical = ReyPushStrategy(new DownRey(), Position, angle - 180);
-                    ReyHorizontal = ReyPushStrategy(new LeftRey(), Position, -(angle + 90));
+                else {
+                    ReyVertical = ReyPushStrategy(new DownRey(), Position, angle - 180, angle);
+                    ReyHorizontal = ReyPushStrategy(new LeftRey(), Position, -(angle + 90), angle);
                 }
             }
 
-            //return new Rey[] {
-            //    ReyPushStrategy(new LeftRey(), Position,-angle ),
-            //    ReyPushStrategy(new TopRey(), Position, angle)
-            //};
+            ReyVertical = GetDistance(Position, ReyVertical);
+            ReyHorizontal = GetDistance(Position, ReyHorizontal);
 
             if (ReyVertical.ReyDistance < ReyHorizontal.ReyDistance)
                 return ReyVertical;
@@ -59,41 +53,49 @@ namespace Client.Services{
                 return ReyHorizontal;
         }
 
-        private Rey ReyPushStrategy(IStrategyReyCanculate strategy, Vector2f Position, float angle){
+        private Rey ReyPushStrategy(IStrategyReyCanculate strategy, Vector2f Position, float angle, float originAngle) {
             Router router = Router.Init();
             Rey result = new Rey();
 
             Vector2f ReyPos = strategy.StartReyPos(Position, angle);
 
-            for (int i = 0; i < 64; i++){
+            for (int i = 0; i < 64; i++) {
 
-                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X >= router.maps.Size.X || ReyPos.Y >= router.maps.Size.Y){
+                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X >= router.maps.Size.X || ReyPos.Y >= router.maps.Size.Y) {
                     result.ReyDistance = 1512;
                     result.ReyPoint = ReyPos;
                     return result;
                 }
 
-                result.Wall = router.maps.Map[(int)ReyPos.Y * router.maps.Size.X + (int)ReyPos.X]; 
+                result.Wall = router.maps.Map[(int)ReyPos.Y * router.maps.Size.X + (int)ReyPos.X];
 
-                if (!router.maps.IsVoid(result.Wall)){
+                if (!router.maps.IsVoid(result.Wall)) {
 
                     result.offset = strategy.GetOfset(ReyPos);
-
-                    float a = (ReyPos.Y - Position.Y);
-                    float b = (ReyPos.X - Position.X);
-                    result.ReyDistance = MathF.Abs(MathF.Sqrt((a * a) + (b * b)));
-
                     result.ReyPoint = ReyPos;
 
-                    //if (map.IsTransparent(result.Wall)){
-                    //    result.rey = ReyPush(new Vector2f(testX, testY), angle, depth);
-                    //    result.rey.ReyDistance += result.ReyDistance;
-                    //}
+                    if (router.maps.IsTransparent(result.Wall))
+                        result.rey = ReyPush(ReyPos, originAngle);
+ 
+
                     return result;
                 }
                 ReyPos += strategy.NextReyPos(angle);
             }
             return result;
+        }
+
+        private Rey GetDistance(Vector2f Position, Rey rey) {
+
+            if (rey.rey != null) {
+                rey.rey = GetDistance(Position, rey.rey);
+            }
+
+            float a = (rey.ReyPoint.Y - Position.Y);
+            float b = (rey.ReyPoint.X - Position.X);
+            rey.ReyDistance = MathF.Abs(MathF.Sqrt((a * a) + (b * b)));
+
+            return rey;
         }
 
     }

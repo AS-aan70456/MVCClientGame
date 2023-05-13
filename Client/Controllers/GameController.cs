@@ -33,7 +33,6 @@ namespace Client.Controllers{
 
             Button = new bool[6];
 
-            MousePosition = Mouse.GetPosition();
             window.MouseMoved += new EventHandler<MouseMoveEventArgs>(MouseMoved);
             window.KeyPressed += new EventHandler<KeyEventArgs>(KeyPressed);
             window.KeyReleased += new EventHandler<KeyEventArgs>(KeyReleased);
