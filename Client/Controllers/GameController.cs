@@ -19,20 +19,21 @@ namespace Client.Controllers{
 
         private List<Enemy> enemy;
         private Player player;
+        private Level level ;
 
         private Vector2i MousePosition;
 
         public void Activation(RenderWindow window){
 
+            level = new Level();
             enemy = new List<Enemy>();
-            player = new Player(new Vector2f(11.5f, 3.5f), new Vector2f(0.5f, 0.5f), 1);
+            player = new Player(level);
 
-            reyCast = new ReyCastService();
+            reyCast = new ReyCastService(level);
 
             View = new GameView(window, reyCast, player, enemy);
 
             Button = new bool[6];
-
             window.MouseMoved += new EventHandler<MouseMoveEventArgs>(MouseMoved);
             window.KeyPressed += new EventHandler<KeyEventArgs>(KeyPressed);
             window.KeyReleased += new EventHandler<KeyEventArgs>(KeyReleased);
@@ -44,7 +45,7 @@ namespace Client.Controllers{
             else if (@event.Code == Keyboard.Key.S)
                 Button[1] = true;
             else if (@event.Code == Keyboard.Key.A)
-                Button[2] = true;
+                Button[2] = true; 
             else if (@event.Code == Keyboard.Key.D)
                 Button[3] = true;
             else if (@event.Code == Keyboard.Key.Q)

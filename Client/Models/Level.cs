@@ -1,4 +1,6 @@
-﻿using SFML.System;
+﻿using Client.Services;
+using SFML.Graphics;
+using SFML.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,17 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Client.Models{
-    class Maps {
+    class Level {
 
         public Vector2i Size { get; private set; }
         public string Map { get; private set; }
-        private char[] Void;
-        private char[] Transparent;
-        private char[] Collision;
+        private static char[] Void;
+        private static char[] Transparent;
+        private static char[] Collision;
 
         public char this[int i,int j] { get { return Map[(int)i * Size.X + (int)j]; } }
 
-        public Maps() {
+        public Level() {
             Size = new Vector2i(24, 15);
             Map += "111111111121111111111211";
             Map += "1              1       1";
@@ -39,15 +41,30 @@ namespace Client.Models{
             Collision = new char[] { '1', '2', '3', '4' };
         }
 
-        // # 1 - wall
-        // # 2 - wall2
-        // # 3 - window
-        // # 4 - dors
-        // # 5 - dorsOpen
+        public void GenerateLevel(int key) {
+            Random random = new Random(key);
+            StringBuilder sBuilder = new StringBuilder();
 
+            //sBuilder[];
 
-        public string GetMap() {
-            return Map;
+            Map = sBuilder.ToString();
+        }
+
+        public static Texture GetTexture(char ch){
+            switch (ch) {
+                case '1':
+                    return ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Wall2.png");
+                case '2':
+                    return ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Wall.png");
+                case '3':
+                    return ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Window.png");
+                case '4':
+                    return ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Door.png");
+                case '5':
+                    return ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\DoorOpen.png");
+                default:
+                    return ResurceMeneger.LoadTexture(@"Resurces\Img\Walss\Flore.jpg");
+            }
         }
 
         public bool IsVoid(char Cell) {

@@ -12,16 +12,10 @@ namespace Client.Models{
         public Vector2f Size { get; protected set; }
         public float angle { get; protected set; }
 
-        public Entity(Vector2f Position, Vector2f Size, float angle) {
-            this.Size = Size;
-            this.Position = Position;
-            this.angle = angle;
-        }
+        Level Level;
 
-        public Entity(){
-            Size = new Vector2f(0.5f, 0.5f);
-            Position = new Vector2f(0, 0);
-            angle = 180;
+        public Entity(Level Level) {
+            this.Level = Level;
         }
 
         public void Move(Vector2f velocity){
@@ -46,7 +40,7 @@ namespace Client.Models{
 
             for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++){
                 for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++){
-                    if (router.maps.IsCollision(router.maps[i, j])){
+                    if (Level.IsCollision(Level[i, j])){
                         if ((Position.Y - (int)Position.Y) < 0.9)
                             dy = i - (Size.Y + 0.01f);
                         else
@@ -64,7 +58,7 @@ namespace Client.Models{
 
             for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++){
                 for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++){
-                    if (router.maps.IsCollision(router.maps[i, j])){
+                    if (Level.IsCollision(Level[i, j])){
                         if ((Position.X - (int)Position.X) < 0.9)
                             dx = j - (Size.X + 0.01f);
                         else
@@ -80,28 +74,6 @@ namespace Client.Models{
 
         public void Rotate(float angle){
             this.angle += angle;
-
-            
-
-            
-
-           //for (int i = (int)entity.Position.Y; i <= (int)(entity.Position.Y + entity.Size.Y); i++)
-           //{
-           //    for (int j = (int)entity.Position.X; j <= (int)(entity.Position.X + entity.Size.X); j++)
-           //    {
-           //        if (map.IsCollision(map[i, j]))
-           //        {
-           //            if ((entity.Position.X - (int)entity.Position.X) < 0.8)
-           //                dx = j - (entity.Size.X + 0.01f);
-           //            else
-           //                dx = j + 1.01f;
-           //        }
-           //    }
-           //}
-           //
-           //entity.Position = new Vector2f(dx, 0);
-           //entity.Position = new Vector2f(0, dy);
-
         }
     }
 }

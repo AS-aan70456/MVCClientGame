@@ -8,12 +8,9 @@ using System.Threading.Tasks;
 namespace Client.Models{
     class Player : Entity{
 
-        public Player(Vector2f Position, Vector2f Size, float angle) : base(Position, Size, angle) {
-        
-        }
-
-        public Player() : base(){
-
+        public Player(Level level) : base(level){
+            Position = new Vector2f(2,2);
+            Size = new Vector2f(0.5f, 0.5f);
         }
     }
 }

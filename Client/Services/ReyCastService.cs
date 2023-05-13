@@ -6,6 +6,12 @@ using System.Collections.Generic;
 namespace Client.Services {
     class ReyCastService {
 
+        private Level level;
+
+        public ReyCastService(Level level) {
+            this.level = level;
+        }
+
         public Rey[] ReyCastWall(Entity entity, float fov, float depth, int CountRey) {
             Rey[] result = new Rey[CountRey];
 
@@ -61,20 +67,20 @@ namespace Client.Services {
 
             for (int i = 0; i < 64; i++) {
 
-                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X >= router.maps.Size.X || ReyPos.Y >= router.maps.Size.Y) {
+                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X >= level.Size.X || ReyPos.Y >= level.Size.Y) {
                     result.ReyDistance = 1512;
                     result.ReyPoint = ReyPos;
                     return result;
                 }
 
-                result.Wall = router.maps.Map[(int)ReyPos.Y * router.maps.Size.X + (int)ReyPos.X];
+                result.Wall = level.Map[(int)ReyPos.Y * level.Size.X + (int)ReyPos.X];
 
-                if (!router.maps.IsVoid(result.Wall)) {
+                if (!level.IsVoid(result.Wall)) {
 
                     result.offset = strategy.GetOfset(ReyPos);
                     result.ReyPoint = ReyPos;
 
-                    if (router.maps.IsTransparent(result.Wall))
+                    if (level.IsTransparent(result.Wall))
                         result.rey = ReyPush(ReyPos, originAngle);
  
 
