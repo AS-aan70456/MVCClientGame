@@ -33,16 +33,11 @@ namespace Client.Models{
             float X1 = 0;
             float Y1 = 0;
 
-            
-            
-
             X = ((float)((MathF.Cos((((angle) * MathF.PI) / 180)) * velocity.X)));
             X1 = ((float)((MathF.Cos((((90 + angle) * MathF.PI) / 180)) * velocity.Y)));
 
             Y = ((float)((MathF.Sin((((angle) * MathF.PI) / 180)) * velocity.X)));
             Y1 = ((float)((MathF.Sin((((90 - angle) * MathF.PI) / 180)) * velocity.Y)));
-
-
 
             Position -= new Vector2f(0, Y);
             Position -= new Vector2f(0, Y1);
