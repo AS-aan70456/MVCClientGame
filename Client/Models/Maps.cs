@@ -34,8 +34,6 @@ namespace Client.Models{
             Map += "1                      1";
             Map += "111111211111411112211111";
 
-
-
             Void = new char[] { ' ' };
             Transparent = new char[] { '3', '5' };
             Collision = new char[] { '1', '2', '3', '4' };
