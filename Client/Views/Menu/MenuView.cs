@@ -18,16 +18,15 @@ namespace Client.Views{
         Button SettingButton;
         Button ExitButton;
 
-        Texture Background;
-        Texture Button;
-
+        RectangleShape Background;
 
 
         public MenuView(RenderWindow window) {
             this.window = window;
 
-            Background = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Background.png"); 
-            Button = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png"); 
+            Background = new RectangleShape();
+            Background.Texture = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Background.png");
+            Background.Size = (SFML.System.Vector2f)window.Size;
 
             Router router = Router.Init();
             PlayButton = new Button(() => {
@@ -35,7 +34,7 @@ namespace Client.Views{
             });
             PlayButton.Size = new Vector2f(400, 80);
             PlayButton.Position = new Vector2f((window.Size.X / 2) - 200, 80);
-            PlayButton.Texture = Button;
+            PlayButton.Texture = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png");
 
             PlayButton.Text = new Text("Play", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
             PlayButton.Text.Position = new Vector2f((window.Size.X / 2) - 58, 80 - 10);
@@ -47,7 +46,7 @@ namespace Client.Views{
             });
             OnlineButton.Size = new Vector2f(400, 80);
             OnlineButton.Position = new Vector2f((window.Size.X / 2) - 200, 180);
-            OnlineButton.Texture = Button;
+            OnlineButton.Texture = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png");
 
             OnlineButton.Text = new Text("Online", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
             OnlineButton.Text.Position = new Vector2f((window.Size.X / 2) - 85, 180 - 10);
@@ -55,11 +54,11 @@ namespace Client.Views{
             OnlineButton.Text.CharacterSize = 64;
 
             SettingButton = new Button(() => {
-                router.graphicsControllers.SetController(new GameController());
+                router.graphicsControllers.SetController(new SettingController());
             });
             SettingButton.Size = new Vector2f(400, 80);
             SettingButton.Position = new Vector2f((window.Size.X / 2) - 200, 280);
-            SettingButton.Texture = Button;
+            SettingButton.Texture = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png");
 
             SettingButton.Text = new Text("Setting", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
             SettingButton.Text.Position = new Vector2f((window.Size.X / 2) - 100, 280 - 10);
@@ -71,7 +70,7 @@ namespace Client.Views{
             });
             ExitButton.Size = new Vector2f(400, 80);
             ExitButton.Position = new Vector2f((window.Size.X / 2) - 200, 380);
-            ExitButton.Texture = Button;
+            ExitButton.Texture = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png");
 
             ExitButton.Text = new Text("Exit", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
             ExitButton.Text.Position = new Vector2f((window.Size.X / 2) - 60, 380 - 10);
@@ -83,10 +82,6 @@ namespace Client.Views{
         }
 
         public void Render(){
-            RectangleShape Background = new RectangleShape();
-            Background.Size = (SFML.System.Vector2f)window.Size;
-            Background.Texture = new Texture(this.Background);
-
 
             window.Draw(Background);
 
