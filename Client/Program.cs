@@ -11,12 +11,15 @@ namespace Client{
         static void Main(string[] args) {
             Router router = Router.Init();
             Config.LoadConfig();
+
+            //Console.WriteLine(Config.config.ToString());
+
             router.graphicsControllers.SetController(new MenuController());
 
-            //Config.Save(new Config() {fov=70, numRey = 512, isDisplayFPS=true, isTransparantTextures = false });
-            
+            Console.WriteLine(Config.config.ToString());
 
-            Console.WriteLine(Config.config.numRey);
+
+            Console.WriteLine();
             Console.Read();
         }
     }

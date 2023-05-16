@@ -13,12 +13,12 @@ namespace Client.Views{
     class MenuView : IRender{
         public RenderWindow window { get; }
 
-        Button PlayButton;
-        Button OnlineButton;
-        Button SettingButton;
-        Button ExitButton;
+        private Button PlayButton;
+        private Button OnlineButton;
+        private Button SettingButton;
+        private Button ExitButton;
 
-        RectangleShape Background;
+        private RectangleShape Background;
 
 
         public MenuView(RenderWindow window) {
@@ -44,6 +44,7 @@ namespace Client.Views{
             OnlineButton = new Button(() => {
                 router.graphicsControllers.SetController(new GameController());
             });
+
             OnlineButton.Size = new Vector2f(400, 80);
             OnlineButton.Position = new Vector2f((window.Size.X / 2) - 200, 180);
             OnlineButton.Texture = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png");

@@ -25,5 +25,12 @@ namespace Client{
             File.WriteAllText("appsettings.json", JsonConvert.SerializeObject(config));
         }
 
+        public static void Save(){
+            File.WriteAllText("appsettings.json", JsonConvert.SerializeObject(config));
+        }
+
+        public override string ToString(){
+            return JsonConvert.SerializeObject(config);
+        }
     }
 }
