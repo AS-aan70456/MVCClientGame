@@ -14,7 +14,8 @@ namespace Client.Views{
     class SettingView : IRender{
         public RenderWindow window { get; }
 
-        private RectangleShape background;
+        private Rectangle Background;
+        private Rectangle FormSettingGame;
 
         private CheckBox checkBoxFPS;
         private CheckBox CheckBoxTransparantTextures;
@@ -22,9 +23,9 @@ namespace Client.Views{
         public SettingView(RenderWindow window){
             this.window = window;
 
-            background = new RectangleShape();
-            background.Size = (SFML.System.Vector2f)window.Size;
-            background.Texture = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\BackGroundSetting.png");
+            //Background = new RectangleShape();
+            //Background.Size = (SFML.System.Vector2f)window.Size;
+           // Background.Texture = ResurceMeneger.LoadTexture(@"Resurces\Img\UI\BackGroundSetting.png");
 
             checkBoxFPS = new CheckBox(
                 () => { Config.config.isDisplayFPS = true; Config.Save(); },
@@ -36,8 +37,8 @@ namespace Client.Views{
                 Config.config.isDisplayFPS
             );
 
-            checkBoxFPS.Size = new Vector2f(70, 70);
-            checkBoxFPS.Position = new Vector2f((window.Size.X - checkBoxFPS.Size.X) - 30, 210);
+           // checkBoxFPS.Size = new Vector2f(70, 70);
+            //checkBoxFPS.Position = new Vector2f((window.Size.X - checkBoxFPS.Size.X) - 30, 210);
 
             // CheckBox TransparantTextures 
 
@@ -51,8 +52,8 @@ namespace Client.Views{
                 Config.config.isTransparantTextures
             );
 
-            CheckBoxTransparantTextures.Size = new Vector2f(70, 70);
-            CheckBoxTransparantTextures.Position = new Vector2f((window.Size.X - checkBoxFPS.Size.X) - 30, 320);
+            //CheckBoxTransparantTextures.Size = new Vector2f(70, 70);
+           // CheckBoxTransparantTextures.Position = new Vector2f((window.Size.X - checkBoxFPS.Size.X) - 30, 320);
 
             window.MouseButtonPressed += MousePressed;
 
@@ -60,9 +61,9 @@ namespace Client.Views{
 
         public void Render(){
             
-            window.Draw(background);
-            window.Draw(checkBoxFPS);
-            window.Draw(CheckBoxTransparantTextures);
+        //    window.Draw(background);
+        //    window.Draw(checkBoxFPS);
+        //    window.Draw(CheckBoxTransparantTextures);
         }
 
         private void MousePressed(object sender, MouseButtonEventArgs @event){

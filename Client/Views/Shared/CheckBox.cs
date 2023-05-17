@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Client.Views.Shared{
-    class CheckBox : RectangleShape{
+    class CheckBox : GuiBase{
 
-        public Texture OnCheck { get; set; }
+        public RectangleShape rectangle;
+
+        public Texture OnCheck { get; private set; }
         public Texture OffCheck { get; set; }
 
         public bool IsAction { get; private set; }
-
+        
         private Action Action;
         private Action DizAction;
 
@@ -24,26 +27,42 @@ namespace Client.Views.Shared{
             this.OnCheck = OnCheck;
             this.OffCheck = OffCheck;
 
-            base.Texture = OffCheck;
+            rectangle = new RectangleShape();
+
+            rectangle.Texture = OffCheck;
 
             this.IsAction = IsAction;
 
             if (IsAction)
-                base.Texture = OnCheck;
+                rectangle.Texture = OnCheck;
             else
-                base.Texture = OffCheck;
+                rectangle.Texture = OffCheck;
             
+        }
+
+        public void LoadTexture(Texture texture){
+            rectangle.Texture = texture;
+        }
+
+        public override void SetPosition(Vector2f Position){
+            base.SetPosition(Position);
+            rectangle.Position = base.Position;
+        }
+
+        public override void SetSize(Vector2f Size){
+            base.SetSize(Size);
+            rectangle.Size = base.Size;
         }
 
         public bool CheckPressed(Vector2i MousePos){
             if ((MousePos.X > Position.X && MousePos.Y > Position.Y) && (MousePos.X < Position.X + Size.X && MousePos.Y < Position.Y + Size.Y)){
                 IsAction = !IsAction;
                 if (IsAction){
-                    base.Texture = OnCheck;
+                    rectangle.Texture = OnCheck;
                     Action.Invoke();
                 }
                 else {
-                    base.Texture = OffCheck;
+                    rectangle.Texture = OffCheck;
                     DizAction.Invoke();
                 }
                 
@@ -51,5 +70,18 @@ namespace Client.Views.Shared{
             return false;
         }
 
+        protected override void Updata(){
+
+        }
+
+        protected override IEnumerable<Drawable> GiveAwayGraphicsPackages() {
+            List<Drawable> drawables = new List<Drawable>();
+            drawables.Add(rectangle);
+            return drawables;
+        }
+
+        protected override void MousePressed(object sender, MouseButtonEventArgs @event){
+            CheckPressed(new Vector2i(@event.X, @event.Y));
+        }
     }
 }
