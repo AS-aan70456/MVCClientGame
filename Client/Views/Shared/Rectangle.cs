@@ -14,6 +14,7 @@ namespace Client.Views.Shared{
 
         public Rectangle() {
             rectangle = new RectangleShape();
+
         }
 
         public void LoadTexture(Texture texture){

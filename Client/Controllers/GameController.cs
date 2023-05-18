@@ -10,7 +10,7 @@ using Client.Services;
 
 namespace Client.Controllers{
     class GameController : IDrawController{
-
+        //Button
         bool[] Button;
 
         private GameView View;
@@ -19,7 +19,7 @@ namespace Client.Controllers{
 
         private List<Enemy> enemy;
         private Player player;
-        private Level level ;
+        private Level level;
 
         private Vector2i MousePosition;
 
@@ -34,6 +34,8 @@ namespace Client.Controllers{
             View = new GameView(window, reyCast, player, enemy);
 
             Button = new bool[6];
+
+            //add event
             window.MouseMoved += new EventHandler<MouseMoveEventArgs>(MouseMoved);
             window.KeyPressed += new EventHandler<KeyEventArgs>(KeyPressed);
             window.KeyReleased += new EventHandler<KeyEventArgs>(KeyReleased);

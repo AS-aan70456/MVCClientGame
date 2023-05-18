@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Client.Models{
+    // TDO Rey, reyservice into (controller, view)
     class Rey{
 
         public Rey rey;

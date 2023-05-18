@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Client.Services{
+
+    //makes sure that only one texture is loaded into applications
     static class ResurceMeneger{
 
         static private List<IResurce> resurce;

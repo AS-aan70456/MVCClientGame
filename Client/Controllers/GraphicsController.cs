@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Client.Controllers{
+
+    //Costile between sfml and my architecture
     class GraphicsController{
         private RenderWindow window;
         private IDrawController gameController;
@@ -29,6 +31,7 @@ namespace Client.Controllers{
             Updata();
         }
 
+        //Updata scene
         private void Updata() {
             Router router = Router.Init();
 

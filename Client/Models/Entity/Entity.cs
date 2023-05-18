@@ -18,9 +18,9 @@ namespace Client.Models{
             this.Level = Level;
         }
 
+        // Movement and collision function
         public void Move(Vector2f velocity){
-            Router router = Router.Init();
-
+            
             float X = 0;
             float Y = 0;
 
@@ -37,7 +37,7 @@ namespace Client.Models{
             Position -= new Vector2f(0, Y1);
 
             float dy = Position.Y;
-
+            // Collision Y
             for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++){
                 for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++){
                     if (Level.IsCollision(Level[i, j])){
@@ -55,7 +55,7 @@ namespace Client.Models{
             Position -= new Vector2f(X1, 0);
 
             float dx = Position.X;
-
+            // Collision X
             for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++){
                 for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++){
                     if (Level.IsCollision(Level[i, j])){
@@ -69,7 +69,6 @@ namespace Client.Models{
 
 
             Position = new Vector2f(dx, Position.Y);
-
         }
 
         public void Rotate(float angle){

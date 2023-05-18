@@ -17,6 +17,7 @@ namespace Client.Views.Shared{
 
         public Button(Action Pressed) {
             rectangle = new RectangleShape();
+            text = new Text();
             this.Pressed = Pressed;
         }
 

@@ -10,8 +10,12 @@ namespace Client.Interfeices{
 
          void Draw();
          void Updata();
-         void Activation(RenderWindow window);
-         void DizActivation();
+
+        //function connect event
+        void Activation(RenderWindow window);
+
+        //function diz connect event
+        void DizActivation();
 
     }
 }

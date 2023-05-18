@@ -3,7 +3,9 @@ using SFML.System;
 using System;
 using System.Collections.Generic;
 
-namespace Client.Services {
+namespace Client.Services{
+
+    // service for calculating the length distance between the player and the walls
     class ReyCastService {
 
         private Level level;
@@ -12,6 +14,8 @@ namespace Client.Services {
             this.level = level;
         }
 
+
+        //the service interface executes the firing of beams according to the given instructions
         public Rey[] ReyCastWall(Entity entity, float fov, float depth, int CountRey) {
             Rey[] result = new Rey[CountRey];
 
@@ -24,6 +28,7 @@ namespace Client.Services {
             return result;
         }
 
+        //internal function for emitting rays
         private Rey ReyPush(Vector2f Position, float angle) {
 
             Rey ReyVertical = new Rey();
@@ -53,12 +58,15 @@ namespace Client.Services {
             ReyVertical = GetDistance(Position, ReyVertical);
             ReyHorizontal = GetDistance(Position, ReyHorizontal);
 
+
+            //length check between vertical and horizontal reys
             if (ReyVertical.ReyDistance < ReyHorizontal.ReyDistance)
                 return ReyVertical;
             else
                 return ReyHorizontal;
         }
 
+        //function iterates beam radiation
         private Rey ReyPushStrategy(IStrategyReyCanculate strategy, Vector2f Position, float angle, float originAngle) {
             Router router = Router.Init();
             Rey result = new Rey();
@@ -91,6 +99,7 @@ namespace Client.Services {
             return result;
         }
 
+        //length check between vertical and horizontal beam reys
         private Rey GetDistance(Vector2f Position, Rey rey) {
 
             if (rey.rey != null) {
@@ -106,6 +115,7 @@ namespace Client.Services {
 
     }
 
+    //interface strategy for defining the beam radiation formula
     interface IStrategyReyCanculate {
 
         Vector2f StartReyPos(Vector2f Position, float angle);

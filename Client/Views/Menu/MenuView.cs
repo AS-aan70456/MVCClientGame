@@ -13,6 +13,7 @@ namespace Client.Views{
     class MenuView : IRender{
         public RenderWindow window { get; }
 
+        // this is core node
         private Rectangle Background;
 
         public MenuView(RenderWindow window) {
