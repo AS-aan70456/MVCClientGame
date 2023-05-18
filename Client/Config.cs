@@ -13,6 +13,7 @@ namespace Client{
 
         public bool isTransparantTextures { get; set; }
         public bool isDisplayFPS { get; set; }
+        public bool isFullScrean { get; set; }
 
         public int numRey { get; set; }
         public float fov { get; set; }

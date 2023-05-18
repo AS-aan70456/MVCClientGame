@@ -13,13 +13,29 @@ namespace Client.Views.Shared{
         private RectangleShape rectangle;
         public Text text;
 
-        private Action Pressed;
+        private Action<Vector2i> Pressed;
+        private Action<Vector2i> Releassed;
 
-        public Button(Action Pressed) {
+        public Button(){
             rectangle = new RectangleShape();
             text = new Text();
+        }
+
+        public Button(Action<Vector2i> Pressed) {
+            rectangle = new RectangleShape();
+            text = new Text();
+
             this.Pressed = Pressed;
         }
+
+        public Button(Action<Vector2i> Pressed, Action<Vector2i> Releassed){
+            rectangle = new RectangleShape();
+            text = new Text();
+
+            this.Pressed = Pressed;
+            this.Releassed = Releassed;
+        }
+
 
         public void LoadTexture(Texture texture) {
             rectangle.Texture = texture;
@@ -42,10 +58,8 @@ namespace Client.Views.Shared{
 
         public bool CheckPressed(Vector2i MousePos) {
             if ((MousePos.X > rectangle.Position.X && MousePos.Y > rectangle.Position.Y) && (MousePos.X < rectangle.Position.X + rectangle.Size.X && MousePos.Y < rectangle.Position.Y + rectangle.Size.Y)){
-                Pressed.Invoke();
                 return true;
             }
-
             return false;
         }
 
@@ -61,7 +75,13 @@ namespace Client.Views.Shared{
         }
 
         protected override void MousePressed(object sender, MouseButtonEventArgs @event){
-            CheckPressed(new Vector2i(@event.X, @event.Y));
+            if (CheckPressed(new Vector2i(@event.X, @event.Y))) Pressed?.Invoke(new Vector2i(@event.X, @event.Y));
         }
+
+        protected override void MouseReleassed(object sender, MouseButtonEventArgs @event){
+            if (CheckPressed(new Vector2i(@event.X, @event.Y))) Releassed?.Invoke(new Vector2i(@event.X, @event.Y));
+        }
+
+        protected override void MouseMoved(object sender, MouseMoveEventArgs e){}
     }
 }

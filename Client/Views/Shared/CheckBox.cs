@@ -83,5 +83,9 @@ namespace Client.Views.Shared{
         protected override void MousePressed(object sender, MouseButtonEventArgs @event){
             CheckPressed(new Vector2i(@event.X, @event.Y));
         }
+
+        protected override void MouseReleassed(object sender, MouseButtonEventArgs @event){}
+
+        protected override void MouseMoved(object sender, MouseMoveEventArgs e){}
     }
 }

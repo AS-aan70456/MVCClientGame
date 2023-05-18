@@ -13,13 +13,18 @@ namespace Client.Controllers{
     //Costile between sfml and my architecture
     class GraphicsController{
         private RenderWindow window;
-        private IDrawController gameController;
+        public IDrawController gameController { get; private set; }
 
 
         public  GraphicsController(RenderWindow window){
             this.window = window;
             this.window.Closed += new EventHandler(Close);
 
+        }
+
+        public void UpdataWindow(RenderWindow window) {
+            this.window = window;
+            this.window.Closed += new EventHandler(Close);
         }
 
         public void SetController(IDrawController gameController) {

@@ -9,15 +9,12 @@ using System.IO;
 namespace Client{
     class Program{
         static void Main(string[] args) {
-            Router router = Router.Init();
             Config.LoadConfig();
 
-            //Console.WriteLine(Config.config.ToString());
-
+            Router router = Router.Init();
             router.graphicsControllers.SetController(new MenuController());
 
             Console.WriteLine(Config.config.ToString());
-
 
             Console.WriteLine();
             Console.Read();

@@ -24,7 +24,7 @@ namespace Client.Views{
             Background.SetSize((Vector2f)window.Size);
 
             Router router = Router.Init();
-            Button PlayButton = new Button(() => {
+            Button PlayButton = new Button((Vector2i mousePos) => {
                 router.graphicsControllers.SetController(new GameController());
             });
             PlayButton.text = new Text("Play", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
@@ -35,7 +35,7 @@ namespace Client.Views{
             PlayButton.SetPosition(new Vector2f((window.Size.X / 2) - 200, 80));
             PlayButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png"));     
 
-            Button OnlineButton = new Button(() => {
+            Button OnlineButton = new Button((Vector2i mousePos) => {
                 router.graphicsControllers.SetController(new GameController());
             });
             OnlineButton.text = new Text("Online", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
@@ -46,7 +46,7 @@ namespace Client.Views{
             OnlineButton.SetPosition(new Vector2f((window.Size.X / 2) - 200, 180));
             OnlineButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png"));
 
-            Button SettingButton = new Button(() => {
+            Button SettingButton = new Button((Vector2i mousePos) => {
                 router.graphicsControllers.SetController(new SettingController());
             });
             SettingButton.text = new Text("Setting", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
@@ -58,7 +58,7 @@ namespace Client.Views{
             SettingButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png"));
 
 
-            Button ExitButton = new Button(() => {
+            Button ExitButton = new Button((Vector2i mousePos) => {
                 window.Close();
             });
             ExitButton.text = new Text("Exit", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));

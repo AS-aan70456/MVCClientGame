@@ -11,13 +11,17 @@ namespace Client{
 
         public bool IsOpen { get { return window.IsOpen; } }
 
-        public GraphicsController graphicsControllers { get; }
+        public GraphicsController graphicsControllers { get; private set; }
         public PlayersController playersControl { get; }
 
         private static Router router = null;
 
         private Router() {
-            window = new RenderWindow(new VideoMode(1080, 720), "MVC_SFML");
+
+            if (Config.config.isFullScrean)
+                InitFullScrean();
+            else
+                InitScrean();
 
             graphicsControllers = new GraphicsController(window);
             playersControl = new PlayersController();
@@ -29,5 +33,18 @@ namespace Client{
             return router;
         }
 
+        public void InitFullScrean() {
+            window?.Close();
+            window = new RenderWindow(new VideoMode(1080, 720), "MVC_SFML", Styles.Fullscreen);
+            graphicsControllers?.UpdataWindow(window);
+            graphicsControllers?.SetController(graphicsControllers.gameController);
+        }
+
+        public void InitScrean(){
+            window?.Close();
+            window = new RenderWindow(new VideoMode(1080, 720), "MVC_SFML");
+            graphicsControllers?.UpdataWindow(window);
+            graphicsControllers?.SetController(graphicsControllers.gameController);
+        }
     }
 }

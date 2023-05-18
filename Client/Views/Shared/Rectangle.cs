@@ -19,6 +19,7 @@ namespace Client.Views.Shared{
 
         public void LoadTexture(Texture texture){
             rectangle.Texture = texture;
+
         }
 
         public override void SetPosition(Vector2f Position){
@@ -40,5 +41,9 @@ namespace Client.Views.Shared{
         }
 
         protected override void MousePressed(object sender, MouseButtonEventArgs @event){}
+
+        protected override void MouseReleassed(object sender, MouseButtonEventArgs @event) {}
+
+        protected override void MouseMoved(object sender, MouseMoveEventArgs e){}
     }
 }

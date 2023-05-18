@@ -34,6 +34,8 @@ namespace Client.Views.Shared{
         protected abstract void Updata();
         protected abstract IEnumerable<Drawable> GiveAwayGraphicsPackages();
         protected abstract void MousePressed(object sender, MouseButtonEventArgs e);
+        protected abstract void MouseReleassed(object sender, MouseButtonEventArgs e);
+        protected abstract void MouseMoved(object sender, MouseMoveEventArgs e);
 
         public IEnumerable<Drawable> GetGraphicsPackages(){
             List<Drawable> Packages = new List<Drawable>();
@@ -45,15 +47,20 @@ namespace Client.Views.Shared{
 
         public void EventMousePressed(object sender, MouseButtonEventArgs e){
             MousePressed(sender, e);
-            for (int i = 0; i < nods.Count; i++)
-                nods[i].EventMousePressed(sender, e);
+            for (int i = 0; i < nods.Count; i++) nods[i].EventMousePressed(sender, e);
         }
 
-        public void addNode(GuiBase newNode){
-            Console.WriteLine(newNode.GetHashCode());
+        public void EventMouseReleassed(object sender, MouseButtonEventArgs e){
+            MouseReleassed(sender, e);
+            for (int i = 0; i < nods.Count; i++) nods[i].EventMouseReleassed(sender, e);
+        }
 
+        public void EventMouseMoved(object sender, MouseMoveEventArgs e){
+            MouseMoved(sender, e);
+            for (int i = 0; i < nods.Count; i++) nods[i].EventMouseMoved(sender, e);
+        }
+        public void addNode(GuiBase newNode){
             nods.Add(newNode);
-            foreach (var el in nods) el.SetPosition(this.Position + el.Position);
         }
 
         public GuiBase GetNode(int Code){
