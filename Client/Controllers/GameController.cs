@@ -82,15 +82,15 @@ namespace Client.Controllers{
         }
     
         public void Updata(){
-
+            Router router = Router.Init();
             if (Button[0] == true)
-                player.Move(new Vector2f(0.1f, 0));
+                player.Move(new Vector2f(0.1f * router.graphicsControllers.time, 0));
             if (Button[1] == true)
-                player.Move(new Vector2f(-0.1f, 0));
+                player.Move(new Vector2f(-0.1f * router.graphicsControllers.time, 0));
             if (Button[2] == true)
-                player.Move(new Vector2f(0, 0.1f));
+                player.Move(new Vector2f(0, 0.1f * router.graphicsControllers.time));
             if (Button[3] == true)
-                player.Move(new Vector2f(0, -0.1f));
+                player.Move(new Vector2f(0, -0.1f * router.graphicsControllers.time));
             if (Button[4] == true)
                 player.Rotate(1.2f);
             if (Button[5] == true)

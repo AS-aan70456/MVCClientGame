@@ -31,11 +31,17 @@ namespace Client.Views.Shared{
             this.Size = Size;
         }
 
-        protected abstract void Updata();
         protected abstract IEnumerable<Drawable> GiveAwayGraphicsPackages();
+        protected abstract void Updata();
         protected abstract void MousePressed(object sender, MouseButtonEventArgs e);
         protected abstract void MouseReleassed(object sender, MouseButtonEventArgs e);
         protected abstract void MouseMoved(object sender, MouseMoveEventArgs e);
+
+        public void UpdataNode(){
+            Updata();
+            foreach (var el in nods)
+                el.UpdataNode();
+        }
 
         public IEnumerable<Drawable> GetGraphicsPackages(){
             List<Drawable> Packages = new List<Drawable>();

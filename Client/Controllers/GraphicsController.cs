@@ -14,12 +14,23 @@ namespace Client.Controllers{
     class GraphicsController{
         private RenderWindow window;
         public IDrawController gameController { get; private set; }
+        private Clock Clock;
 
+        public float time { get; private set; }
+        public float fps { get; private set; }
+
+        private Clock clockFps;
+        private Time previousTime;
+        private Time curentTime;
 
         public  GraphicsController(RenderWindow window){
             this.window = window;
             this.window.Closed += new EventHandler(Close);
 
+            Clock = new Clock();
+            clockFps = new Clock();
+
+            previousTime = clockFps.ElapsedTime;
         }
 
         public void UpdataWindow(RenderWindow window) {
@@ -42,6 +53,14 @@ namespace Client.Controllers{
 
             while (router.IsOpen) {
                 window.Clear();
+
+                time = Clock.ElapsedTime.AsMicroseconds();
+                time = time / 29000;
+                Clock.Restart();
+
+                curentTime = clockFps.ElapsedTime;
+                fps = 1.0f / (curentTime.AsSeconds() - previousTime.AsSeconds());
+                previousTime = curentTime;
 
                 gameController.Draw();
                 gameController.Updata();

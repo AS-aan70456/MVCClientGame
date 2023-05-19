@@ -32,8 +32,6 @@ namespace Client.Views.Shared{
             rectangle.Size = base.Size;
         }
 
-        protected override void Updata(){}
-
         protected override IEnumerable<Drawable> GiveAwayGraphicsPackages(){
             List<Drawable> drawables = new List<Drawable>();
             drawables.Add(rectangle);
@@ -45,5 +43,7 @@ namespace Client.Views.Shared{
         protected override void MouseReleassed(object sender, MouseButtonEventArgs @event) {}
 
         protected override void MouseMoved(object sender, MouseMoveEventArgs e){}
+
+        protected override void Updata(){}
     }
 }

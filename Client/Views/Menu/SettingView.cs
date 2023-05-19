@@ -253,7 +253,30 @@ namespace Client.Views{
 
         // init form Game
         public GuiBase InitFormSettingGame() {
-            return new Rectangle();
+            Rectangle FormSettingGame = new Rectangle();
+            FormSettingGame.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\1.png"));
+            FormSettingGame.SetSize(new Vector2f(930, 595));
+
+            // List Boxs
+            ListBox listBox = new ListBox(new string[] {"Easily", "Normal", "Hard" }, 0, (int countList) => {
+                //Console.WriteLine(new string[] { "Easily", "Normal", "Hard" }[countList]);
+            });
+            listBox.LoadText(new Text("FPS", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf")));
+            listBox.text.FillColor = new Color(0, 100, 0);
+            listBox.text.CharacterSize = 32;
+
+            listBox.SetSize(new Vector2f(245, 70));
+            listBox.SetPosition(new Vector2f(20, 20));
+            listBox.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Table.png"));
+
+            // Border
+
+            // Add nodes
+            FormSettingGame.addNode(listBox);
+
+            FormSettingGame.SetPosition(new Vector2f((window.Size.X / 2) - FormSettingGame.size.X / 2, 100 + (window.Size.Y / 2) - FormSettingGame.size.Y / 2));
+
+            return FormSettingGame;
         }
 
         public void Render(){

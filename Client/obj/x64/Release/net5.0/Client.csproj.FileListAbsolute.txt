@@ -75,3 +75,5 @@ C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\obj\x64\Relea
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\obj\x64\Release\net5.0\ref\Client.dll
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\obj\x64\Release\net5.0\Client.pdb
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\obj\x64\Release\net5.0\Client.genruntimeconfig.cache
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\x64\Release\net5.0\Newtonsoft.Json.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\x64\Release\net5.0\SFML.Audio.dll

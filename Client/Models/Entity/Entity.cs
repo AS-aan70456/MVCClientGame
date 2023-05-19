@@ -41,7 +41,7 @@ namespace Client.Models{
             for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++){
                 for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++){
                     if (Level.IsCollision(Level[i, j])){
-                        if ((Position.Y - (int)Position.Y) < 0.9)
+                        if ((Position.Y - (int)Position.Y) < 0.8)
                             dy = i - (Size.Y + 0.01f);
                         else
                             dy = i + 1.01f;
@@ -59,7 +59,7 @@ namespace Client.Models{
             for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++){
                 for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++){
                     if (Level.IsCollision(Level[i, j])){
-                        if ((Position.X - (int)Position.X) < 0.9)
+                        if ((Position.X - (int)Position.X) < 0.8)
                             dx = j - (Size.X + 0.01f);
                         else
                             dx = j + 1.01f;

@@ -61,10 +61,6 @@ namespace Client.Views.Shared{
             rectangle.Size = base.Size;
         }
 
-        protected override void Updata(){
-            
-        }
-
         private bool CheckPressed(Vector2i MousePos){
             if ((MousePos.X > slider.Position.X && MousePos.Y > slider.Position.Y) && (MousePos.X < slider.Position.X + slider.Size.X && MousePos.Y < slider.Position.Y + slider.Size.Y)) {
 
@@ -104,5 +100,7 @@ namespace Client.Views.Shared{
 
             MovedSlider.Invoke((int)Vaule);
         }
+
+        protected override void Updata(){}
     }
 }
