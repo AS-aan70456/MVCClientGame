@@ -28,7 +28,7 @@ namespace Client.Views
         public void Render(){
             Router router = Router.Init();
 
-            Rey[] reyCastModel = reyCast.ReyCastWall(player, 70, 16, 1080);
+            Rey[] reyCastModel = reyCast.ReyCastWall(player, Config.config.fov, 16, Config.config.numRey);
             for (int i = 0; i < reyCastModel.Length; i++)
                 DrawWall(reyCastModel[i], reyCastModel.Length, i);
             

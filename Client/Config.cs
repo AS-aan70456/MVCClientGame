@@ -16,7 +16,7 @@ namespace Client{
         public bool isFullScrean { get; set; }
 
         public int numRey { get; set; }
-        public float fov { get; set; }
+        public int fov { get; set; }
 
         public static void LoadConfig() {
             config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("appsettings.json"));

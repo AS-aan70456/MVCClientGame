@@ -24,6 +24,7 @@ namespace Client.Controllers{
         private Vector2i MousePosition;
 
         public void Activation(RenderWindow window){
+            window.SetMouseCursorVisible(false);
 
             level = new Level();
             enemy = new List<Enemy>();
@@ -47,13 +48,17 @@ namespace Client.Controllers{
             else if (@event.Code == Keyboard.Key.S)
                 Button[1] = true;
             else if (@event.Code == Keyboard.Key.A)
-                Button[2] = true; 
+                Button[2] = true;
             else if (@event.Code == Keyboard.Key.D)
                 Button[3] = true;
             else if (@event.Code == Keyboard.Key.Q)
                 Button[4] = true;
             else if (@event.Code == Keyboard.Key.E)
                 Button[5] = true;
+            else if (@event.Code == Keyboard.Key.Escape){
+                View.window.SetMouseCursorVisible(true);
+                Router.Init().graphicsControllers.SetController(new MenuController());
+            }
 
         }
 
@@ -94,11 +99,15 @@ namespace Client.Controllers{
         }
 
         private void MouseMoved(object sender, MouseMoveEventArgs @event) {
-            player.Rotate(( MousePosition.X - @event.X) * 0.6f);
+            player.Rotate(( MousePosition.X - @event.X) * 0.2f);
 
             RenderWindow render = (RenderWindow)sender;
             MousePosition = new Vector2i(@event.X, @event.Y);
-            //Mouse.SetPosition(render.Position + (Vector2i)(render.Size / 2));
+            if (@event.X < 500 || @event.X > View.window.Size.X - 500) {
+                Vector2i newMousePos = View.window.Position + (Vector2i)(View.window.Size / 2);
+                Mouse.SetPosition(newMousePos);
+                MousePosition = newMousePos - View.window.Position;
+            }
 
         }
 

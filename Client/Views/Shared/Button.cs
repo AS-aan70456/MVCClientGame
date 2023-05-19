@@ -56,7 +56,7 @@ namespace Client.Views.Shared{
             rectangle.Size = base.Size;
         }
 
-        public bool CheckPressed(Vector2i MousePos) {
+        private bool CheckPressed(Vector2i MousePos) {
             if ((MousePos.X > rectangle.Position.X && MousePos.Y > rectangle.Position.Y) && (MousePos.X < rectangle.Position.X + rectangle.Size.X && MousePos.Y < rectangle.Position.Y + rectangle.Size.Y)){
                 return true;
             }

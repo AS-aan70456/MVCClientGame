@@ -75,8 +75,8 @@ namespace Client.Views{
             GameButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button2.png"));
 
             Button exitButton = new Button((Vector2i mousePos) => {
-                router.graphicsControllers.SetController(new MenuController());
                 Config.Save();
+                router.graphicsControllers.SetController(new MenuController());
             });
             exitButton.SetSize(new Vector2f(130, 90));
             exitButton.SetPosition(new Vector2f((window.Size.X) - 150, 13));
@@ -192,7 +192,7 @@ namespace Client.Views{
             BorderReycast.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Table.png"));
 
             Button BorderFovView = new Button();
-            BorderFovView.text = new Text("34", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
+            BorderFovView.text = new Text(Config.config.fov.ToString(), ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
             BorderFovView.text.FillColor = new Color(122, 68, 74);
             BorderFovView.text.CharacterSize = 32;
 
@@ -201,7 +201,7 @@ namespace Client.Views{
             BorderFovView.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\TableMin.png"));
 
             Button BorderReyView = new Button();
-            BorderReyView.text = new Text("512", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
+            BorderReyView.text = new Text(Config.config.numRey.ToString(), ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
             BorderReyView.text.FillColor = new Color(122, 68, 74);
             BorderReyView.text.CharacterSize = 32;
 
@@ -210,14 +210,20 @@ namespace Client.Views{
             BorderReyView.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\TableMin.png"));
 
             //Slidebar
-            Slider sliderFov = new Slider();
+            Slider sliderFov = new Slider(20, 150, Config.config.fov, (int Vaule) => {
+                BorderFovView.text.DisplayedString = Vaule.ToString();
+                Config.config.fov = Vaule;
+            });
             sliderFov.SetSize(new Vector2f(450, 36));
             sliderFov.SetPosition(new Vector2f(285, 310));
             sliderFov.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\LineP.png"));
 
             sliderFov.LoadTextureSlider(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\G.png"));
 
-            Slider sliderRey = new Slider();
+            Slider sliderRey = new Slider(60, 1000, Config.config.numRey, (int Vaule) => {
+                BorderReyView.text.DisplayedString = Vaule.ToString();
+                Config.config.numRey = Vaule;
+            });
             sliderRey.SetSize(new Vector2f(455, 35));
             sliderRey.SetPosition(new Vector2f(280, 410));
             sliderRey.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\LineP.png"));
@@ -230,12 +236,12 @@ namespace Client.Views{
             FormSettingGraphics.addNode(BorderFovView);
             FormSettingGraphics.addNode(BorderReyView);
 
-            FormSettingGraphics.addNode(FullScrean); 
+            FormSettingGraphics.addNode(FullScrean);
             FormSettingGraphics.addNode(BorderFov);
             FormSettingGraphics.addNode(BorderFps);
             FormSettingGraphics.addNode(BorderReycast);
             FormSettingGraphics.addNode(BorderTransparantTextures);
-            
+
             FormSettingGraphics.addNode(checkBoxFPS);
             FormSettingGraphics.addNode(CheckBoxFullScrean);
             FormSettingGraphics.addNode(CheckBoxTransparantTextures);
@@ -262,7 +268,7 @@ namespace Client.Views{
             Background.EventMouseReleassed(sender, @event);
         }
         private void MouseMove(object sender, MouseMoveEventArgs @event){
-            //Background.EventMousePressed(sender, @event);
+            Background.EventMouseMoved(sender, @event);
         }
 
         //function diz connect event

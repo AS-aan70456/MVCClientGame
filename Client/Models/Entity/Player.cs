@@ -10,7 +10,7 @@ namespace Client.Models{
 
         public Player(Level level) : base(level){
             Position = new Vector2f(2,2);
-            Size = new Vector2f(0.5f, 0.5f);
+            Size = new Vector2f(0.7f, 0.7f);
         }
     }
 }
