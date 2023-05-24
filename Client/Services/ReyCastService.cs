@@ -83,12 +83,12 @@ namespace Client.Services{
 
                 result.Wall = level.Map[(int)ReyPos.Y * level.Size.X + (int)ReyPos.X];
 
-                if (!level.IsVoid(result.Wall)) {
+                if (!Level.IsVoid(result.Wall)) {
 
                     result.offset = strategy.GetOfset(ReyPos);
                     result.ReyPoint = ReyPos;
 
-                    if (level.IsTransparent(result.Wall) && Config.config.isTransparantTextures)
+                    if (Level.IsTransparent(result.Wall) && Config.config.isTransparantTextures)
                         result.rey = ReyPush(ReyPos, originAngle);
  
 

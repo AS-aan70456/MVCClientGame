@@ -9,8 +9,8 @@ namespace Client.Models{
     class Player : Entity{
 
         public Player(Level level) : base(level){
-            Position = new Vector2f(2,2);
-            Size = new Vector2f(0.7f, 0.7f);
+            Position = (Vector2f)level.SpawnPoint;
+            Size = new Vector2f(0.5f, 0.5f);
         }
     }
 }

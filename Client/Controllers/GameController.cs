@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using SFML.System;
 using SFML.Window;
 using Client.Services;
+using Client.Models.Dungeons;
 
 namespace Client.Controllers{
     class GameController : IDrawController{
@@ -19,6 +20,8 @@ namespace Client.Controllers{
 
         private List<Enemy> enemy;
         private Player player;
+
+        private DungeonsGenerator generator;
         private Level level;
 
         private Vector2i MousePosition;
@@ -26,15 +29,20 @@ namespace Client.Controllers{
         public void Activation(RenderWindow window){
             window.SetMouseCursorVisible(false);
 
-            level = new Level();
+            generator = new DungeonsGenerator();
+            level = generator.GenerateDungeon(DateTime.Now.Second);
             enemy = new List<Enemy>();
             player = new Player(level);
 
             reyCast = new ReyCastService(level);
 
-            View = new GameView(window, reyCast, player, enemy);
+            View = new GameView(window, reyCast, player, enemy, level);
 
             Button = new bool[6];
+
+            Vector2i newMousePos = View.window.Position + (Vector2i)(View.window.Size / 2);
+            Mouse.SetPosition(newMousePos);
+            MousePosition = newMousePos - View.window.Position;
 
             //add event
             window.MouseMoved += new EventHandler<MouseMoveEventArgs>(MouseMoved);
@@ -84,13 +92,13 @@ namespace Client.Controllers{
         public void Updata(){
             Router router = Router.Init();
             if (Button[0] == true)
-                player.Move(new Vector2f(0.1f * router.graphicsControllers.time, 0));
+                player.Move(new Vector2f(0.1f, 0));
             if (Button[1] == true)
-                player.Move(new Vector2f(-0.1f * router.graphicsControllers.time, 0));
+                player.Move(new Vector2f(-0.1f, 0));
             if (Button[2] == true)
-                player.Move(new Vector2f(0, 0.1f * router.graphicsControllers.time));
+                player.Move(new Vector2f(0, 0.1f));
             if (Button[3] == true)
-                player.Move(new Vector2f(0, -0.1f * router.graphicsControllers.time));
+                player.Move(new Vector2f(0, -0.1f));
             if (Button[4] == true)
                 player.Rotate(1.2f);
             if (Button[5] == true)

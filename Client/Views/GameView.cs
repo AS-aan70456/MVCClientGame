@@ -19,13 +19,17 @@ namespace Client.Views{
         private List<Enemy> entities;
         private Player player;
 
-        public GameView(RenderWindow window, ReyCastService reyCast, Player player, List<Enemy> entities){
+        Level Level;
+
+        public GameView(RenderWindow window, ReyCastService reyCast, Player player, List<Enemy> entities, Level Level)
+        {
             this.window = window;
             this.reyCast = reyCast;
             this.player = player;
             this.entities = entities;
 
             Canvas = new Rectangle();
+            this.Level = Level;
 
             if (Config.config.isDisplayFPS){
 
@@ -49,8 +53,29 @@ namespace Client.Views{
 
             Canvas.UpdataNode();
 
-            foreach (var el in Canvas.GetGraphicsPackages())
-                window.Draw(el);
+            for (int i = 0; i < this.Level.Size.X; i++){
+                for (int j = 0; j < this.Level.Size.Y; j++)
+                {
+                    RectangleShape rectangle = new RectangleShape(new Vector2f(10, 10));
+                    rectangle.Position = new Vector2f(3 * i, 3 * j);
+                    rectangle.FillColor = Color.Black;
+                    if (Level.Map[i + (j * this.Level.Size.X)] != ' ')
+                        if (Level.Map[i + (j * this.Level.Size.X)] == '5')
+                            rectangle.FillColor = Color.Red;
+                        else
+                            rectangle.FillColor = Color.Green;
+                    window.Draw(rectangle);
+
+                }
+            }
+
+            RectangleShape rect = new RectangleShape(new Vector2f(7, 7));
+            rect.Position = (player.Position * 3);
+            rect.FillColor = Color.Yellow;
+            window.Draw(rect);
+
+            //foreach (var el in Canvas.GetGraphicsPackages())
+            //    window.Draw(el);
         }
 
     

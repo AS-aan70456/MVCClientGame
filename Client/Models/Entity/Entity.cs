@@ -20,7 +20,9 @@ namespace Client.Models{
 
         // Movement and collision function
         public void Move(Vector2f velocity){
-            
+
+            //velocity = velocity * Router.Init().graphicsControllers.time;
+
             float X = 0;
             float Y = 0;
 
@@ -38,9 +40,12 @@ namespace Client.Models{
 
             float dy = Position.Y;
             // Collision Y
-            for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++){
-                for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++){
-                    if (Level.IsCollision(Level[i, j])){
+            for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++)
+            {
+                for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++)
+                {
+                    if (Level.IsCollision(Level[i, j]))
+                    {
                         if ((Position.Y - (int)Position.Y) < 0.8)
                             dy = i - (Size.Y + 0.01f);
                         else
@@ -48,7 +53,7 @@ namespace Client.Models{
                     }
                 }
             }
-            
+
             Position = new Vector2f(Position.X, dy);
 
             Position -= new Vector2f(X, 0);
@@ -56,9 +61,12 @@ namespace Client.Models{
 
             float dx = Position.X;
             // Collision X
-            for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++){
-                for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++){
-                    if (Level.IsCollision(Level[i, j])){
+            for (int i = (int)Position.Y; i <= (int)(Position.Y + Size.Y); i++)
+            {
+                for (int j = (int)Position.X; j <= (int)(Position.X + Size.X); j++)
+                {
+                    if (Level.IsCollision(Level[i, j]))
+                    {
                         if ((Position.X - (int)Position.X) < 0.8)
                             dx = j - (Size.X + 0.01f);
                         else
