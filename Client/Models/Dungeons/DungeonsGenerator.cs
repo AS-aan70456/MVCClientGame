@@ -5,48 +5,120 @@ using System.Linq;
 using System.Windows;
 using System.Text;
 using System.Threading.Tasks;
+using Client.Models.Structure;
 
 namespace Client.Models.Dungeons{
    
 
     class DungeonsGenerator{
 
-        
+        private Graph graph;
+        private Random _Rand;
 
-        public DungeonsGenerator() {
-        
+        private List<Chank> chanks = new List<Chank>();
+        private List<Room> rooms = new List<Room>();
+        private int chankSize;
+
+        private Vector2i dungeonSize;
+        private int roomCount;
+
+        public DungeonsGenerator(Vector2i size, int roomCount, int chankSize) {
+            this.dungeonSize = size;
+            this.chankSize = chankSize;
+            this.roomCount = roomCount;
+
+            graph = new Graph();
         }
 
         public Level GenerateDungeon(int key) {
-            Random random = new Random(key);
-            List<Room> rooms = new List<Room>();
-
-            List<Vector2i> roomsPosCenter = new List<Vector2i>();
-
-            int CountRoom = 6;
+            _Rand = new Random(key);
 
             //GenerationDungeon
-            for (int i = 0; i < CountRoom; i++) {
-                Room newRoom = Room.GenerateRoom(
-                    new Vector2i(random.Next(8) + 6, random.Next(8) + 6)
-                );
-                newRoom.Position = GetRandomPointInCircle(random.Next(360), random.Next(6) + 6);
-                while (newRoom.CheckColisionRoom(rooms)){
-                    newRoom.Position = GetRandomPointInCircle(random.Next(360), random.Next(6) + 6);
-                }
+            GenerateChank();
+            ShuffleChank();
+            GenerateRoom();
+            char[,] Dangeons = CreateCorridor(RoomsToCharArry(rooms));
 
-                rooms.Add(newRoom);
-                roomsPosCenter.Add(newRoom.Center);
-
-            }
-
-            char[,] Dangeons = RoomsToCharArry(rooms);
-            return new Level(ToString(Dangeons), new Vector2i(Dangeons.GetLength(0), Dangeons.GetLength(1)),new Vector2i(10, 10));
+            
+            return new Level(ToString(Dangeons), new Vector2i(Dangeons.GetLength(0), Dangeons.GetLength(1)),rooms[0].Center);
         }
 
+        private void GenerateChank() {
+            Vector2i chankPos = new Vector2i();
+            for (int y = 0; y < dungeonSize.Y / chankSize; y++) {
+                for (int x = 0; x < dungeonSize.Y / chankSize; x++){
+                    chankPos.X = x * chankSize;
+                    chankPos.Y = y * chankSize;
+                    chanks.Add(new Chank(chankPos));
+                }
+            }
+        }
 
-        private Vector2i GetRandomPointInCircle(float radius, float disntanse) {
-            return new Vector2i((int)(Math.Cos(radius) * disntanse), (int)(Math.Sin(radius) * disntanse));
+        private void ShuffleChank(){
+
+            for (int i = chanks.Count - 1; i >= 1; i--){
+                int j = _Rand.Next(i + 1);
+
+                Chank currentChank = chanks[j];
+                chanks[j] = chanks[i];
+                chanks[i] = currentChank;
+            }
+        }
+
+        private void GenerateRoom() {
+            int minRoom = (int)(chankSize / 2.5f);
+            int maxRoom = (int)(chankSize / 1f);
+
+            for (int i = 0; i < roomCount; i++){
+                Room room = Room.GenerateRoom(
+                    new Vector2i(_Rand.Next(maxRoom - minRoom) + minRoom, _Rand.Next(maxRoom - minRoom) + minRoom),
+                    chanks[i].Position,
+                    chankSize
+                );
+                rooms.Add(room);
+                graph.AddNode(room.Center);
+                chanks[i].Room = room;
+            }
+        }
+
+        public char[,] CreateCorridor(char[,] Dangeons) {
+            List<NodeData> endPoinds = graph.GetDataNode();
+
+            foreach (var el in endPoinds) {
+                Vector2i currentPos = el.StartPos;
+                Vector2i leght = el.StartPos - el.EndPos;
+
+                int offsetX;
+                if (leght.X > 0) 
+                   offsetX = -1;
+                else
+                   offsetX = 1;
+
+                int offsetY;
+                if (leght.Y > 0)
+                    offsetY = -1;
+                else
+                    offsetY = 1;
+
+                for (int x = 0; x < Math.Abs(leght.X); x++) {
+                    
+                    if(Dangeons[currentPos.X, currentPos.Y] == '1')
+                        Dangeons[currentPos.X, currentPos.Y] = '5';
+                    else
+                        Dangeons[currentPos.X, currentPos.Y] = ' ';
+                    currentPos.X += offsetX;
+                }
+                for (int y = 0; y < Math.Abs(leght.Y); y++){
+ 
+                    if (Dangeons[currentPos.X, currentPos.Y] == '1')
+                        Dangeons[currentPos.X, currentPos.Y] = '5';
+                    else
+                        Dangeons[currentPos.X, currentPos.Y] = ' ';
+                    currentPos.Y += offsetY;
+                }
+
+            }
+            return Dangeons;
         }
 
         private char[,] RoomsToCharArry(List<Room> rooms) {
@@ -67,11 +139,11 @@ namespace Client.Models.Dungeons{
 
             result = new char[Size.X, Size.Y];
 
-            for (int i = 0; i < Size.X; i++)
+            for (int y = 0; y < Size.Y; y++)
             {
-                for (int j = 0; j < Size.Y; j++)
+                for (int x = 0; x < Size.X; x++)
                 {
-                    result[i, j] = '1';
+                    result[x, y] = '2';
                 }
             }
 

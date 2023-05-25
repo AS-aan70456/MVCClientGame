@@ -29,7 +29,7 @@ namespace Client.Controllers{
         public void Activation(RenderWindow window){
             window.SetMouseCursorVisible(false);
 
-            generator = new DungeonsGenerator();
+            generator = new DungeonsGenerator(new Vector2i(48, 48), 8, 16);
             level = generator.GenerateDungeon(DateTime.Now.Second);
             enemy = new List<Enemy>();
             player = new Player(level);

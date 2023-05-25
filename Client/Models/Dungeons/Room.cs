@@ -15,13 +15,17 @@ namespace Client.Models.Dungeons{
 
         public char[,] Structure { get; private set; }
 
-        private Room(){}
+        public Room(){
+            Position = new Vector2i();
+            Size = new Vector2i();
+        }
 
-        public static Room GenerateRoom(Vector2i Size) {
+        public static Room GenerateRoom(Vector2i Size, Vector2i chankPos, int chankSize) {
             Room room = new Room();
 
             room.Structure = new char[Size.X, Size.Y];
             room.Size = Size;
+            room.Position = new Vector2i(chankPos.X + ((chankSize - Size.X) / 2), chankPos.Y + ((chankSize - Size.Y) / 2));
 
             for (int i = 0; i < Size.Y; i++){
                 for (int j = 0; j < Size.X; j++){
