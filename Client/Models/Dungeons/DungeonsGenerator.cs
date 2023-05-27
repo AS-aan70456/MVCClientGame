@@ -40,7 +40,7 @@ namespace Client.Models.Dungeons{
             char[,] Dangeons = CreateCorridor(RoomsToCharArry(rooms));
 
             
-            return new Level(ToString(Dangeons), new Vector2i(Dangeons.GetLength(0), Dangeons.GetLength(1)),rooms[0].Center);
+            return new Level(Dangeons, new Vector2i(Dangeons.GetLength(0), Dangeons.GetLength(1)),rooms[0].Center);
         }
 
         private void GenerateChank() {
@@ -103,7 +103,7 @@ namespace Client.Models.Dungeons{
                 for (int x = 0; x < Math.Abs(leght.X); x++) {
                     
                     if(Dangeons[currentPos.X, currentPos.Y] == '1')
-                        Dangeons[currentPos.X, currentPos.Y] = '5';
+                        Dangeons[currentPos.X, currentPos.Y] = '4';
                     else
                         Dangeons[currentPos.X, currentPos.Y] = ' ';
                     currentPos.X += offsetX;
@@ -111,7 +111,7 @@ namespace Client.Models.Dungeons{
                 for (int y = 0; y < Math.Abs(leght.Y); y++){
  
                     if (Dangeons[currentPos.X, currentPos.Y] == '1')
-                        Dangeons[currentPos.X, currentPos.Y] = '5';
+                        Dangeons[currentPos.X, currentPos.Y] = '4';
                     else
                         Dangeons[currentPos.X, currentPos.Y] = ' ';
                     currentPos.Y += offsetY;
@@ -137,7 +137,7 @@ namespace Client.Models.Dungeons{
 
             Vector2i Size = (-MinSize) + MaxSize;
 
-            result = new char[Size.X, Size.Y];
+            result = new char[Size.X + 2, Size.Y + 2];
 
             for (int y = 0; y < Size.Y; y++)
             {
@@ -162,14 +162,6 @@ namespace Client.Models.Dungeons{
             return result;
         }
 
-        private string ToString(char[,] Dangeons){
-            StringBuilder @string = new StringBuilder();
-            for (int i = 0; i < Dangeons.GetLength(1); i++) {
-                for (int j = 0; j < Dangeons.GetLength(0); j++){
-                    @string.Append(Dangeons[j,i]);
-                }
-            }
-            return @string.ToString();
-        }
+
     }
 }

@@ -21,7 +21,7 @@ namespace Client.Models{
         // Movement and collision function
         public void Move(Vector2f velocity){
 
-            velocity = velocity * Router.Init().graphicsControllers.time;
+            //velocity = velocity * Router.Init().graphicsControllers.time;
 
             float X = 0;
             float Y = 0;

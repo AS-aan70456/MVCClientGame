@@ -14,14 +14,14 @@ namespace Client.Models{
         public Vector2i SpawnPoint { get; private set; }
 
         public Vector2i Size { get; private set; }
-        public string Map { get; private set; }
+        public char[,] Map { get; set; }
         private static char[] Void;
         private static char[] Transparent;
         private static char[] Collision;
 
-        public char this[int i,int j] { get { return Map[(int)i * Size.X + (int)j]; } }
+        public char this[int i,int j] { get { return Map[i, j]; } }
 
-        public Level(string Map, Vector2i Size, Vector2i SpawnPoint) {
+        public Level(char[,] Map, Vector2i Size, Vector2i SpawnPoint) {
 
             this.Map = Map;
             this.Size = Size;

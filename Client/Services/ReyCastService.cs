@@ -21,7 +21,7 @@ namespace Client.Services{
 
             for (int i = 0; i < CountRey; i++) {
                 float ReyAngle = (entity.angle + fov / 2 - i * fov / CountRey);
-                result[i] = ReyPush(entity.Position + (entity.Size / 2), ReyAngle);
+                result[i] = ReyPush(entity.Position + (entity.Size / 2), ReyAngle, entity.angle, depth);
                 //result[i].ReyDistance /= MathF.Cos(i/fov);
             }
 
@@ -29,34 +29,34 @@ namespace Client.Services{
         }
 
         //internal function for emitting rays
-        private Rey ReyPush(Vector2f Position, float angle) {
+        private Rey ReyPush(Vector2f Position, float angle, float entityAngle, float depth) {
 
             Rey ReyVertical = new Rey();
             Rey ReyHorizontal = new Rey();
 
             if (MathF.Sin((angle * MathF.PI) / 180) > 0) {
                 if (MathF.Cos((angle * MathF.PI) / 180) > 0) {
-                    ReyVertical = ReyPushStrategy(new LeftRey(), Position, -(angle + 90), angle);
-                    ReyHorizontal = ReyPushStrategy(new TopRey(), Position, angle, angle);
+                    ReyVertical = ReyPushStrategy(new LeftRey(), Position, -(angle + 90), angle, entityAngle, depth);
+                    ReyHorizontal = ReyPushStrategy(new TopRey(), Position, angle, angle, entityAngle, depth);
                 }
                 else {
-                    ReyVertical = ReyPushStrategy(new TopRey(), Position, angle, angle);
-                    ReyHorizontal = ReyPushStrategy(new RightRey(), Position, -(angle - 90), angle);
+                    ReyVertical = ReyPushStrategy(new TopRey(), Position, angle, angle, entityAngle, depth);
+                    ReyHorizontal = ReyPushStrategy(new RightRey(), Position, -(angle - 90), angle, entityAngle, depth);
                 }
             }
             else {
                 if (MathF.Cos((angle * MathF.PI) / 180) < 0) {
-                    ReyVertical = ReyPushStrategy(new RightRey(), Position, -(angle - 90), angle);
-                    ReyHorizontal = ReyPushStrategy(new DownRey(), Position, angle - 180, angle);
+                    ReyVertical = ReyPushStrategy(new RightRey(), Position, -(angle - 90), angle, entityAngle, depth);
+                    ReyHorizontal = ReyPushStrategy(new DownRey(), Position, angle - 180, angle, entityAngle, depth);
                 }
                 else {
-                    ReyVertical = ReyPushStrategy(new DownRey(), Position, angle - 180, angle);
-                    ReyHorizontal = ReyPushStrategy(new LeftRey(), Position, -(angle + 90), angle);
+                    ReyVertical = ReyPushStrategy(new DownRey(), Position, angle - 180, angle, entityAngle, depth);
+                    ReyHorizontal = ReyPushStrategy(new LeftRey(), Position, -(angle + 90), angle, entityAngle, depth);
                 }
             }
 
-            ReyVertical = GetDistance(Position, ReyVertical);
-            ReyHorizontal = GetDistance(Position, ReyHorizontal);
+            ReyVertical = GetDistance(Position, ReyVertical, ((angle - entityAngle) * MathF.PI) / 180);
+            ReyHorizontal = GetDistance(Position, ReyHorizontal, ((angle - entityAngle) * MathF.PI) / 180);
 
 
             //length check between vertical and horizontal reys
@@ -67,21 +67,23 @@ namespace Client.Services{
         }
 
         //function iterates beam radiation
-        private Rey ReyPushStrategy(IStrategyReyCanculate strategy, Vector2f Position, float angle, float originAngle) {
-            Router router = Router.Init();
+        private Rey ReyPushStrategy(IStrategyReyCanculate strategy, Vector2f Position, float angle, float originAngle,float entityAngle, float depth) {
             Rey result = new Rey();
 
             Vector2f ReyPos = strategy.StartReyPos(Position, angle);
 
-            for (int i = 0; i < 64; i++) {
+            for (int i = 0; i < depth; i++) {
 
-                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X >= level.Size.X || ReyPos.Y >= level.Size.Y) {
+                if (ReyPos.X < 3 || ReyPos.Y < 3 || ReyPos.X > level.Size.X - 3|| ReyPos.Y > level.Size.Y - 3) {
                     result.ReyDistance = 1512;
                     result.ReyPoint = ReyPos;
                     return result;
                 }
 
-                result.Wall = level.Map[(int)ReyPos.Y * level.Size.X + (int)ReyPos.X];
+                try { result.Wall = level.Map[(int)ReyPos.Y, (int)ReyPos.X]; }
+                catch (Exception) {
+                    break;
+                }
 
                 if (!Level.IsVoid(result.Wall)) {
 
@@ -89,27 +91,29 @@ namespace Client.Services{
                     result.ReyPoint = ReyPos;
 
                     if (Level.IsTransparent(result.Wall) && Config.config.isTransparantTextures)
-                        result.rey = ReyPush(ReyPos, originAngle);
+                        result.rey = ReyPush(ReyPos, originAngle, entityAngle, depth);
  
 
                     return result;
                 }
                 ReyPos += strategy.NextReyPos(angle);
             }
+            result.offset = strategy.GetOfset(ReyPos);
+            result.ReyPoint = ReyPos;
+
             return result;
         }
 
         //length check between vertical and horizontal beam reys
-        private Rey GetDistance(Vector2f Position, Rey rey) {
+        private Rey GetDistance(Vector2f Position, Rey rey, float angle) {
 
             if (rey.rey != null) {
-                rey.rey = GetDistance(Position, rey.rey);
+                rey.rey = GetDistance(Position, rey.rey, angle);
             }
 
             float a = (rey.ReyPoint.Y - Position.Y);
             float b = (rey.ReyPoint.X - Position.X);
-            rey.ReyDistance = MathF.Abs(MathF.Sqrt((a * a) + (b * b)));
-
+            rey.ReyDistance = MathF.Abs(MathF.Sqrt((a * a) + (b * b))) * MathF.Cos(angle);
             return rey;
         }
 

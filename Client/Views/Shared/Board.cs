@@ -44,6 +44,6 @@ namespace Client.Views.Shared{
         protected override void MousePressed(object sender, MouseButtonEventArgs @event){}
         protected override void MouseReleassed(object sender, MouseButtonEventArgs @event){}
         protected override void MouseMoved(object sender, MouseMoveEventArgs e) { }
-        protected override void Updata(){ text.DisplayedString = ((int)(Router.Init().graphicsControllers.fps * 1.5)).ToString(); }
+        protected override void Updata(){ text.DisplayedString = ((int)(Router.Init().graphicsControllers.fps)).ToString(); }
     }
 }

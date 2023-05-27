@@ -90,32 +90,48 @@ namespace Client.Controllers{
         }
     
         public void Updata(){
-            Router router = Router.Init();
+            Console.WriteLine(player.angleY);
             if (Button[0] == true)
                 player.Move(new Vector2f(0.1f, 0));
             if (Button[1] == true)
                 player.Move(new Vector2f(-0.1f, 0));
             if (Button[2] == true)
-                player.Move(new Vector2f(0, 0.1f));
+                player.Move(new Vector2f(0, 0.04f));
             if (Button[3] == true)
-                player.Move(new Vector2f(0, -0.1f));
-            if (Button[4] == true)
-                player.Rotate(1.2f);
-            if (Button[5] == true)
-                player.Rotate(-1.2f);
-            
+                player.Move(new Vector2f(0, -0.04f));
+            if (Button[5] == true){
+                Rey[] actionRey = reyCast.ReyCastWall(player, 1, 1, 1);
+                if (actionRey[0].Wall == '4')
+                    level.Map[(int)actionRey[0].ReyPoint.Y, (int)actionRey[0].ReyPoint.X] = '5';
+            }
+
+
         }
 
         private void MouseMoved(object sender, MouseMoveEventArgs @event) {
-            player.Rotate(( MousePosition.X - @event.X) * 0.2f);
+            player.Rotate(( MousePosition.X - @event.X) * 0.1f);
+            float offsetY = (MousePosition.Y - @event.Y) * 0.2f;
+            if (offsetY > 0)
+                if(player.angleY < 30)
+                    player.RotateY(offsetY);
+            if (offsetY <= 0)
+                if (player.angleY > -30)
+                    player.RotateY(offsetY);
 
-            RenderWindow render = (RenderWindow)sender;
             MousePosition = new Vector2i(@event.X, @event.Y);
-            if (@event.X < 500 || @event.X > View.window.Size.X - 500) {
-                Vector2i newMousePos = View.window.Position + (Vector2i)(View.window.Size / 2);
-                Mouse.SetPosition(newMousePos);
-                MousePosition = newMousePos - View.window.Position;
+
+            if (@event.X < 500 || @event.X > View.window.Size.X - 500){
+                Vector2i newMousePos = new Vector2i((int)(View.window.Size.X / 2), MousePosition.Y);
+                Mouse.SetPosition(newMousePos, View.window);
+                MousePosition.X = newMousePos.X;
             }
+
+            if ( @event.Y < 200 || @event.Y > View.window.Size.Y - 200){
+                Vector2i newMousePos =  new Vector2i(MousePosition.X, (int)(View.window.Size.Y / 2));
+                Mouse.SetPosition(newMousePos, View.window);
+                MousePosition.Y = newMousePos.Y;
+            }
+            
 
         }
 

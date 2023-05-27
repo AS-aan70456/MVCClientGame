@@ -47,7 +47,7 @@ namespace Client.Views{
         public void Render(){
             Router router = Router.Init();
 
-            Rey[] reyCastModel = reyCast.ReyCastWall(player, Config.config.fov, 16, Config.config.numRey);
+            Rey[] reyCastModel = reyCast.ReyCastWall(player, Config.config.fov, 64, Config.config.numRey);
             for (int i = 0; i < reyCastModel.Length; i++)
                 DrawWall(reyCastModel[i], reyCastModel.Length, i);
 
@@ -55,9 +55,41 @@ namespace Client.Views{
 
             foreach (var el in Canvas.GetGraphicsPackages())
                 window.Draw(el);
+
+            //for (int i = 0; i < Level.Size.X; i++)
+            //{
+            //    for (int j = 0; j < Level.Size.Y; j++)
+            //    {
+            //        RectangleShape rectangle = new RectangleShape(new Vector2f(5, 5));
+            //        rectangle.Position = new Vector2f(5 * j, 5 * i);
+            //        rectangle.FillColor = Color.Black;
+            //        if (Level.Map[i,j] != ' ')
+            //            rectangle.FillColor = Color.Green;
+            //        if (Level.Map[i,j] == '5')
+            //            rectangle.FillColor = Color.Black;
+            //
+            //        window.Draw(rectangle);
+            //    }
+            //}
+            //
+            //VertexArray vertexArray = new VertexArray(PrimitiveType.TriangleFan);
+            //
+            //vertexArray.Append(new Vertex((player.Position + (player.Size / 2)) * 5));
+            //for (int i = 0; i < reyCastModel.Length; i++)
+            //{
+            //    Vertex newVertex = new Vertex(reyCastModel[i].ReyPoint * 5);
+            //    newVertex.Color = new Color(255, 255, 255, 255);
+            //    vertexArray.Append(newVertex);
+            //}
+            //window.Draw(vertexArray);
+            //
+            //RectangleShape rect = new RectangleShape(new Vector2f(player.Size.X * 5, player.Size.Y * 5));
+            //rect.Position = (player.Position * 5);
+            //rect.FillColor = Color.Yellow;
+            //window.Draw(rect);
         }
 
-    
+
 
         private void DrawWall(Rey reyCast,int lenght ,int i) {
             RectangleShape wall = new RectangleShape();
@@ -72,14 +104,14 @@ namespace Client.Views{
                 new Vector2i(1, 16)
             );
 
+            wall.Position = new Vector2f(
+                ((float)window.Size.X / lenght) * (float)(i),
+               (window.Size.Y / 2) * ((1 + (player.angleY / 100)) - (1 / reyCast.ReyDistance))
+            );
+
             wall.Size = new Vector2f(
                 ((float)window.Size.X / lenght),
                 (window.Size.Y / 2) * (1 + (1 / reyCast.ReyDistance)) - (window.Size.Y / 2) * (1 - (1 / reyCast.ReyDistance))
-            );
-
-            wall.Position = new Vector2f(
-                ((float)window.Size.X / lenght) * (float)(i),
-               (window.Size.Y / 2) * (1 - (1 / reyCast.ReyDistance))
             );
 
             int brightness = ((int)(255 - (reyCast.ReyDistance * 10)));
