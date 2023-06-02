@@ -14,7 +14,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\" />
     <Folder Include="ViewModel\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoreEngine\CoreEngine.csproj" />
+    <ProjectReference Include="..\GraphicsEngine\GraphicsEngine.csproj" />
   </ItemGroup>
 
 </Project>

@@ -77,3 +77,7 @@ C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\obj\x64\Debug
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\obj\x64\Debug\net5.0\Client.genruntimeconfig.cache
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\x64\Debug\net5.0\Newtonsoft.Json.dll
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\obj\x64\Debug\net5.0\Client.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\x64\Debug\net5.0\CoreEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\x64\Debug\net5.0\CoreEngine.pdb
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\x64\Debug\net5.0\GraphicsEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\x64\Debug\net5.0\GraphicsEngine.pdb

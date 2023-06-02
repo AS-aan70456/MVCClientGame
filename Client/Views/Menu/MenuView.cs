@@ -1,12 +1,11 @@
 ﻿using Client.Controllers;
 using Client.Interfeices;
-using Client.Services;
-using Client.Views.Shared;
+using GraphicsEngine;
+using GraphicsEngine.Shared;
+using GraphicsEngine.Bilder;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using System;
-using System.Linq;
 
 
 namespace Client.Views{
@@ -14,73 +13,96 @@ namespace Client.Views{
         public RenderWindow window { get; }
 
         // this is core node
-        private Rectangle Background;
+        private UIObject Background;
 
         public MenuView(RenderWindow window) {
             this.window = window;
 
-            Background = new Rectangle();
-            Background.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Background.png"));
+            InitPage();
+
+            window.MouseButtonPressed += MousePressed;
+            window.MouseButtonReleased += MouseReleased;
+        }
+
+        private void InitPage() {
+            Router router = Router.Init();
+
+            Background = new UIObject();
+            Background.AddDrawble(new RectBilder(@"Resurces\Img\UI\Background.png").Init());
             Background.SetSize((Vector2f)window.Size);
 
-            Router router = Router.Init();
-            Button PlayButton = new Button((Vector2i mousePos) => {
-                router.graphicsControllers.SetController(new GameController());
-            });
-            PlayButton.text = new Text("Play", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            PlayButton.text.FillColor = new Color(122, 68, 74);
-            PlayButton.text.CharacterSize = 64;
+            RectangleShape button = new RectBilder(@"Resurces\Img\UI\Button.png").Init();
 
-            PlayButton.SetSize(new Vector2f(400, 80));
+            UIObject PlayButton = new UIObject();
             PlayButton.SetPosition(new Vector2f((window.Size.X / 2) - 200, 80));
-            PlayButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png"));     
+            PlayButton.SetSize(new Vector2f(400, 80));
 
-            Button OnlineButton = new Button((Vector2i mousePos) => {
+            PlayButton.MousePressed = (object sender, MouseButtonEventArgs @event) => {
                 router.graphicsControllers.SetController(new GameController());
-            });
-            OnlineButton.text = new Text("Online", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            OnlineButton.text.FillColor = new Color(122, 68, 74);
-            OnlineButton.text.CharacterSize = 64;
+            };
+            PlayButton.AddDrawble(button);
+            PlayButton.AddDrawble(
+                new TextBilder("Play", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(64)
+                .Init()
+            );
 
-            OnlineButton.SetSize(new Vector2f(400, 80));
+            UIObject OnlineButton = new UIObject();
             OnlineButton.SetPosition(new Vector2f((window.Size.X / 2) - 200, 180));
-            OnlineButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png"));
+            OnlineButton.SetSize(new Vector2f(400, 80));
 
-            Button SettingButton = new Button((Vector2i mousePos) => {
-                router.graphicsControllers.SetController(new SettingController());
-            });
-            SettingButton.text = new Text("Setting", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            SettingButton.text.FillColor = new Color(122, 68, 74);
-            SettingButton.text.CharacterSize = 64;
+            OnlineButton.MousePressed = (object sender, MouseButtonEventArgs @event) => {
+                router.graphicsControllers.SetController(new GameController());
+            };
+            OnlineButton.AddDrawble(new RectangleShape(button));
+            OnlineButton.AddDrawble(
+                new TextBilder("Online", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(64)
+                .Init()
+            );
 
-            SettingButton.SetSize(new Vector2f(400, 80));
+            UIObject SettingButton = new UIObject();
             SettingButton.SetPosition(new Vector2f((window.Size.X / 2) - 200, 280));
-            SettingButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png"));
+            SettingButton.SetSize(new Vector2f(400, 80));
 
+            SettingButton.MousePressed = (object sender, MouseButtonEventArgs @event) => {
+                router.graphicsControllers.SetController(new SettingController());
+            };
+            SettingButton.AddDrawble(new RectangleShape(button));
+            SettingButton.AddDrawble(
+                new TextBilder("Settings", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(64)
+                .Init()
+            );
 
-            Button ExitButton = new Button((Vector2i mousePos) => {
-                window.Close();
-            });
-            ExitButton.text = new Text("Exit", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            ExitButton.text.FillColor = new Color(122, 68, 74);
-            ExitButton.text.CharacterSize = 64;
-
-            ExitButton.SetSize(new Vector2f(400, 80));
+            UIObject ExitButton = new UIObject();
             ExitButton.SetPosition(new Vector2f((window.Size.X / 2) - 200, 380));
-            ExitButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button.png"));
+            ExitButton.SetSize(new Vector2f(400, 80));
+
+            ExitButton.MousePressed = (object sender, MouseButtonEventArgs @event) => {
+                window.Close();
+            };
+            ExitButton.AddDrawble(new RectangleShape(button));
+            ExitButton.AddDrawble(
+                new TextBilder("Exit", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(64)
+                .Init()
+            );
 
             Background.addNode(PlayButton);
             Background.addNode(OnlineButton);
             Background.addNode(SettingButton);
             Background.addNode(ExitButton);
 
-            window.MouseButtonPressed += MousePressed;
-            window.MouseButtonReleased += MouseReleased;
         }
 
         public void Render(){
             foreach (var el in Background.GetGraphicsPackages())
-                window.Draw(el);
+                window.Draw((Drawable)el);
         }
 
         private void MousePressed(object sender, MouseButtonEventArgs @event) {

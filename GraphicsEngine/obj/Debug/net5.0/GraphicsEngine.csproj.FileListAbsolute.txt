@@ -1,0 +1,11 @@
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\bin\Debug\net5.0\GraphicsEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\bin\Debug\net5.0\ref\GraphicsEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\bin\Debug\net5.0\GraphicsEngine.pdb
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\obj\Debug\net5.0\GraphicsEngine.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\obj\Debug\net5.0\GraphicsEngine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\obj\Debug\net5.0\GraphicsEngine.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\obj\Debug\net5.0\GraphicsEngine.AssemblyInfo.cs
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\obj\Debug\net5.0\GraphicsEngine.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\obj\Debug\net5.0\GraphicsEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\obj\Debug\net5.0\ref\GraphicsEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\GraphicsEngine\obj\Debug\net5.0\GraphicsEngine.pdb

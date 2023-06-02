@@ -35,9 +35,11 @@ namespace Client{
 
         public void InitFullScrean() {
             window?.Close();
-            window = new RenderWindow(new VideoMode(1080, 720), "MVC_SFML", Styles.Fullscreen);
+            window = new RenderWindow(new VideoMode(480, 360), "MVC_SFML", Styles.Fullscreen);
+
             graphicsControllers?.UpdataWindow(window);
             graphicsControllers?.SetController(graphicsControllers.gameController);
+
         }
 
         public void InitScrean(){

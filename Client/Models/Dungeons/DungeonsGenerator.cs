@@ -1,16 +1,16 @@
 ﻿using SFML.System;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Text;
-using System.Threading.Tasks;
 using Client.Models.Structure;
+using CoreEngine.System;
+using CoreEngine.Entitys;
 
 namespace Client.Models.Dungeons{
    
 
     class DungeonsGenerator{
+
+        private Level Level;
 
         private Graph graph;
         private Random _Rand;
@@ -22,26 +22,54 @@ namespace Client.Models.Dungeons{
         private Vector2i dungeonSize;
         private int roomCount;
 
-        public DungeonsGenerator(Vector2i size, int roomCount, int chankSize) {
-            this.dungeonSize = size;
-            this.chankSize = chankSize;
-            this.roomCount = roomCount;
-
+        public DungeonsGenerator(int key) {
+            _Rand = new Random(key);
             graph = new Graph();
         }
 
-        public Level GenerateDungeon(int key) {
-            _Rand = new Random(key);
+        public Level GenerateDungeon(Vector2i size, int roomCount, int chankSize) {
+
+            this.dungeonSize = size;
+            this.chankSize = chankSize;
+            this.roomCount = roomCount;
 
             //GenerationDungeon
             GenerateChank();
             ShuffleChank();
             GenerateRoom();
             char[,] Dangeons = CreateCorridor(RoomsToCharArry(rooms));
-
-            
-            return new Level(Dangeons, new Vector2i(Dangeons.GetLength(0), Dangeons.GetLength(1)),rooms[0].Center);
+            Level = new Level(Dangeons, new Vector2i(Dangeons.GetLength(0), Dangeons.GetLength(1)), rooms[0].Center);
+            return Level;
         }
+
+        public List<Entity> GenerateEntity() {
+            List<Entity> entities = new List<Entity>();
+
+            for (int i = 1; i < rooms.Count; i++) {
+
+                for (int j = 0; j < _Rand.Next(2); j++) {
+
+                    Vector2f EntityPos = new Vector2f(
+                        rooms[i].Position.X + _Rand.Next(rooms[i].Size.X - 2) + 1,
+                        rooms[i].Position.Y + _Rand.Next(rooms[i].Size.Y - 2) + 1
+                    );
+                    Enemy enemy = new Enemy(new EntitySettings() {
+                        Position = new Vector3f(EntityPos.X, EntityPos.Y, 0)
+
+                    });
+                    entities.Add(enemy);
+
+
+                }
+
+                
+
+
+            }
+
+            return entities;
+        }
+
 
         private void GenerateChank() {
             Vector2i chankPos = new Vector2i();

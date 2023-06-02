@@ -1,29 +1,28 @@
 ﻿using Client.Controllers;
 using Client.Interfeices;
-using Client.Services;
-using Client.Views.Shared;
+using GraphicsEngine;
+using GraphicsEngine.Bilder;
+using GraphicsEngine.Shared;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client.Views{
     class SettingView : IRender{
         public RenderWindow window { get; }
 
         // this is core node
-        private Rectangle Background; 
+        private UIObject Canvas; 
 
         // UI Element
-        private GuiBase Header;
-        private GuiBase Body;
+        private UIObject Header;
+        private UIObject Body;
 
-        private GuiBase GameForm;
-        private GuiBase GraphicseForm;
+        private UIObject GameForm;
+        private UIObject AudioForm;
+        private UIObject GraphicseForm;
+
 
         public SettingView(RenderWindow window){
             this.window = window;
@@ -32,67 +31,81 @@ namespace Client.Views{
             //init Form
             GameForm = InitFormSettingGame();
             GraphicseForm = InitFormSettingGraphics();
+            AudioForm = InitFormSettingAudio();
 
             //init Background
-            Background = new Rectangle();
-            Background.SetSize((Vector2f)window.Size);
-            Background.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\BackGroundSetting.png"));
-            Background.SetPosition(new Vector2f());
+            Canvas = new UIObject();
+            Canvas.SetSize((Vector2f)window.Size);
+            Canvas.AddDrawble(new RectBilder(@"Resurces\Img\UI\BackGroundSetting.png").Init());
 
             //init Header
-            Header = new Rectangle();
+            Header = new UIObject();
 
-            Button graphicsButton = new Button((Vector2i mousePos) => {
+            UIObject graphicsButton = new UIObject();
+            graphicsButton.MousePressed += (object sender, MouseButtonEventArgs @event) =>{
                 int Code = Body.GetHashCode();
-                Body = GraphicseForm;
-                Background.SetNode(
-                    Code,
-                    Body
-                );
-            });
-            graphicsButton.text = new Text("Graphics", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            graphicsButton.text.FillColor = new Color(122, 68, 74);
-            graphicsButton.text.CharacterSize = 48;
-
+                    Body = GraphicseForm;
+                    Canvas.SetNode(Code,Body);
+            };
             graphicsButton.SetSize(new Vector2f(245, 90));
             graphicsButton.SetPosition(new Vector2f(20, 13));
-            graphicsButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button2.png"));
+            graphicsButton.AddDrawble(new RectBilder(@"Resurces\Img\UI\Button2.png").Init());
+            graphicsButton.AddDrawble(new TextBilder("Graphics", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(48)
+                .Init()
+            );
 
-            Button GameButton = new Button((Vector2i mousePos) => {
+            UIObject audioButton = new UIObject();
+            audioButton.MousePressed += (object sender, MouseButtonEventArgs @event) => {
                 int Code = Body.GetHashCode();
                 Body = GameForm;
-                Background.SetNode(
-                    Code,
-                    Body
-                );
-            });
-            GameButton.text = new Text("Game", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            GameButton.text.FillColor = new Color(122, 68, 74);
-            GameButton.text.CharacterSize = 48;
+                Canvas.SetNode(Code, Body);
+            };
+            audioButton.SetSize(new Vector2f(245, 90));
+            audioButton.SetPosition(new Vector2f(285, 13));
+            audioButton.AddDrawble(new RectBilder(@"Resurces\Img\UI\Button2.png").Init());
+            audioButton.AddDrawble(new TextBilder("Audio", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(48)
+                .Init()
+            );
 
-            GameButton.SetSize(new Vector2f(245, 90));
-            GameButton.SetPosition(new Vector2f(285, 13));
-            GameButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Button2.png"));
+            UIObject gameButton = new UIObject();
+            gameButton.MousePressed += (object sender, MouseButtonEventArgs @event) => {
+                int Code = Body.GetHashCode();
+                Body = AudioForm;
+                Canvas.SetNode(Code, Body);
+            };
+            gameButton.SetSize(new Vector2f(245, 90));
+            gameButton.SetPosition(new Vector2f(550, 13));
+            gameButton.AddDrawble(new RectBilder(@"Resurces\Img\UI\Button2.png").Init());
+            gameButton.AddDrawble(new TextBilder("Game", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(48)
+                .Init()
+            );
 
-            Button exitButton = new Button((Vector2i mousePos) => {
+            UIObject exitButton = new UIObject();
+            exitButton.MousePressed += (object sender, MouseButtonEventArgs @event) => {
                 Config.Save();
                 router.graphicsControllers.SetController(new MenuController());
-            });
+            };
             exitButton.SetSize(new Vector2f(130, 90));
             exitButton.SetPosition(new Vector2f((window.Size.X) - 150, 13));
-            exitButton.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Exit.png"));
+            exitButton.AddDrawble(new RectBilder(@"Resurces\Img\UI\Exit.png").Init());
 
             Header.addNode(graphicsButton);
-            Header.addNode(GameButton);
+            Header.addNode(audioButton);
+            Header.addNode(gameButton);
             Header.addNode(exitButton);
-
 
             //init Body
             Body = GraphicseForm;
 
             //Add nods. Header end Body
-            Background.addNode(Header);
-            Background.addNode(Body);
+            Canvas.addNode(Header);
+            Canvas.addNode(Body);
 
             window.MouseButtonPressed += MousePressed;
             window.MouseButtonReleased += MouseReleased;
@@ -100,198 +113,215 @@ namespace Client.Views{
         }
 
         //init form Graphics
-        public GuiBase InitFormSettingGraphics() {
-            Rectangle FormSettingGraphics = new Rectangle();
-            FormSettingGraphics.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\1.png"));
+        public UIObject InitFormSettingGraphics() {
+            UIObject FormSettingGraphics = new UIObject();
             FormSettingGraphics.SetSize(new Vector2f(930, 595));
+            FormSettingGraphics.AddDrawble(new RectBilder(@"Resurces\Img\UI\1.png").Init());
+
 
             //CheckBox
             CheckBox checkBoxFPS = new CheckBox(
                 () => { Config.config.isDisplayFPS = true;},
-
                 () => { Config.config.isDisplayFPS = false;},
-
-                ResurceMeneger.LoadTexture(@"Resurces\Img\UI\CheckF.png"),
-                ResurceMeneger.LoadTexture(@"Resurces\Img\UI\CheckT.png"),
+       
+                @"Resurces\Img\UI\CheckF.png",
+                @"Resurces\Img\UI\CheckT.png",
                 Config.config.isDisplayFPS
             );
-
             checkBoxFPS.SetSize(new Vector2f(70, 70));
-            checkBoxFPS.SetPosition(new Vector2f((FormSettingGraphics.size.X - checkBoxFPS.size.X) - 20, 20));
-
+            checkBoxFPS.SetPosition(new Vector2f((FormSettingGraphics.Size.X - checkBoxFPS.Size.X) - 20, 20));
+       
             CheckBox CheckBoxTransparantTextures = new CheckBox(
-               () => { Config.config.isTransparantTextures = true;},
+                () => { Config.config.isTransparantTextures = true; },
+                () => { Config.config.isTransparantTextures = false; },
 
-               () => { Config.config.isTransparantTextures = false;},
-
-               ResurceMeneger.LoadTexture(@"Resurces\Img\UI\CheckF.png"),
-               ResurceMeneger.LoadTexture(@"Resurces\Img\UI\CheckT.png"),
-               Config.config.isTransparantTextures
-           );
-
+                @"Resurces\Img\UI\CheckF.png",
+                @"Resurces\Img\UI\CheckT.png",
+                Config.config.isTransparantTextures
+            );
             CheckBoxTransparantTextures.SetSize(new Vector2f(70, 70));
-            CheckBoxTransparantTextures.SetPosition(new Vector2f((FormSettingGraphics.size.X - checkBoxFPS.size.X) - 20, CheckBoxTransparantTextures.size.Y + 40));
+            CheckBoxTransparantTextures.SetPosition(new Vector2f((FormSettingGraphics.Size.X - checkBoxFPS.Size.X) - 20, 40 + 70));
 
             CheckBox CheckBoxFullScrean = new CheckBox(
-               () => { Config.config.isFullScrean = true; Router.Init().InitFullScrean(); },
+                () => { Config.config.isFullScrean = true;
+                    Router.Init().InitFullScrean();
+                    },
+                () => { Config.config.isFullScrean = false;
+                    Router.Init().InitScrean();
+                },
 
-               () => { Config.config.isFullScrean = false; Router.Init().InitScrean(); },
-
-               ResurceMeneger.LoadTexture(@"Resurces\Img\UI\CheckF.png"),
-               ResurceMeneger.LoadTexture(@"Resurces\Img\UI\CheckT.png"),
-               Config.config.isFullScrean
-           );
-
+                @"Resurces\Img\UI\CheckF.png",
+                @"Resurces\Img\UI\CheckT.png",
+                Config.config.isFullScrean
+            );
             CheckBoxFullScrean.SetSize(new Vector2f(70, 70));
-            CheckBoxFullScrean.SetPosition(new Vector2f((FormSettingGraphics.size.X - checkBoxFPS.size.X) - 20, (CheckBoxTransparantTextures.size.Y * 2)+ 60));
+            CheckBoxFullScrean.SetPosition(new Vector2f((FormSettingGraphics.Size.X - checkBoxFPS.Size.X) - 20, 60 + 140));
 
-            // Border
-            Button BorderFps = new Button();
-            BorderFps.text = new Text("FPS", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            BorderFps.text.FillColor = new Color(122, 68, 74);
-            BorderFps.text.CharacterSize = 32;
+            // Borders
+            UIObject BorderFps = new UIObject(new Vector2f(20, 20), new Vector2f(245, 70));
+            BorderFps.AddDrawble(new RectBilder(@"Resurces\Img\UI\Table.png").Init());
+            BorderFps.AddDrawble(
+                new TextBilder("FPS", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(32)
+                .Init()
+            );
 
-            BorderFps.SetSize(new Vector2f(245, 70));
-            BorderFps.SetPosition(new Vector2f(20, 20));
-            BorderFps.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Table.png"));
+            UIObject BorderTransparantTextures = new UIObject(new Vector2f(20, 40 + (70 * 1)), new Vector2f(245, 70));
+            BorderTransparantTextures.AddDrawble(new RectBilder(@"Resurces\Img\UI\Table.png").Init());
+            BorderTransparantTextures.AddDrawble(
+                new TextBilder("Trans Textures", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(32)
+                .Init()
+            );
 
-            Button BorderTransparantTextures = new Button();
-            BorderTransparantTextures.text = new Text("Trans Textures", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            BorderTransparantTextures.text.FillColor = new Color(122, 68, 74);
-            BorderTransparantTextures.text.CharacterSize = 29;
+            UIObject FullScrean = new UIObject(new Vector2f(20, 60 + (70 * 2)), new Vector2f(245, 70));
+            FullScrean.AddDrawble(new RectBilder(@"Resurces\Img\UI\Table.png").Init());
+            FullScrean.AddDrawble(
+                new TextBilder("Full Screan", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(32)
+                .Init()
+            );
 
-            BorderTransparantTextures.SetSize(new Vector2f(245, 70));
-            BorderTransparantTextures.SetPosition(new Vector2f(20, BorderTransparantTextures.size.Y + 40));
-            BorderTransparantTextures.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Table.png"));
+            UIObject BorderFov = new UIObject(new Vector2f(20, 80 + (70 * 3)), new Vector2f(245, 70));
+            BorderFov.AddDrawble(new RectBilder(@"Resurces\Img\UI\Table.png").Init());
+            BorderFov.AddDrawble(
+                new TextBilder("Fov", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(32)
+                .Init()
+            );
 
-            Button FullScrean = new Button();
-            FullScrean.text = new Text("Full Screan", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            FullScrean.text.FillColor = new Color(122, 68, 74);
-            FullScrean.text.CharacterSize = 32;
+            UIObject BorderReycast = new UIObject(new Vector2f(20, 100 + (70 * 4)), new Vector2f(245, 70));
+            BorderReycast.AddDrawble(new RectBilder(@"Resurces\Img\UI\Table.png").Init());
+            BorderReycast.AddDrawble(
+                new TextBilder("Count Rey", @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(32)
+                .Init()
+            );
 
-            FullScrean.SetSize(new Vector2f(245, 70));
-            FullScrean.SetPosition(new Vector2f(20, (BorderTransparantTextures.size.Y * 2) + 60));
-            FullScrean.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Table.png"));
+            Text BorderFovViewText = new TextBilder(Config.config.fov.ToString(), @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(32)
+                .Init();
+            UIObject BorderFovView = new UIObject(new Vector2f((FormSettingGraphics.Size.X - 150) - 20, 80 + (70 * 3)), new Vector2f(150, 70));
+            BorderFovView.AddDrawble(new RectBilder(@"Resurces\Img\UI\TableMin.png").Init());
+            BorderFovView.AddDrawble(BorderFovViewText);
 
-            Button BorderFov = new Button();
-            BorderFov.text = new Text("Fov", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            BorderFov.text.FillColor = new Color(122, 68, 74);
-            BorderFov.text.CharacterSize = 32;
+            Text BorderReyViewText = new TextBilder(Config.config.numRey.ToString(), @"Resurces\Font\Samson.ttf")
+                .FillColor(new Color(122, 68, 74))
+                .CharacterSize(32)
+                .Init();
+            UIObject BorderReyView = new UIObject(new Vector2f((FormSettingGraphics.Size.X - 150) - 20, 100 + (70 * 4)), new Vector2f(150, 70));
+            BorderReyView.AddDrawble(new RectBilder(@"Resurces\Img\UI\TableMin.png").Init());
+            BorderReyView.AddDrawble(BorderReyViewText);
 
-            BorderFov.SetSize(new Vector2f(245, 70));
-            BorderFov.SetPosition(new Vector2f(20, (BorderTransparantTextures.size.Y * 3) + 80));
-            BorderFov.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Table.png"));
-
-            Button BorderReycast = new Button();
-            BorderReycast.text = new Text("Count Rey", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            BorderReycast.text.FillColor = new Color(122, 68, 74);
-            BorderReycast.text.CharacterSize = 32;
-
-            BorderReycast.SetSize(new Vector2f(245, 70));
-            BorderReycast.SetPosition(new Vector2f(20, (BorderTransparantTextures.size.Y * 4) + 100));
-            BorderReycast.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Table.png"));
-
-            Button BorderFovView = new Button();
-            BorderFovView.text = new Text(Config.config.fov.ToString(), ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            BorderFovView.text.FillColor = new Color(122, 68, 74);
-            BorderFovView.text.CharacterSize = 32;
-
-            BorderFovView.SetSize(new Vector2f(150, 70));
-            BorderFovView.SetPosition(new Vector2f((FormSettingGraphics.size.X - BorderFovView.size.X) - 20, 290));
-            BorderFovView.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\TableMin.png"));
-
-            Button BorderReyView = new Button();
-            BorderReyView.text = new Text(Config.config.numRey.ToString(), ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf"));
-            BorderReyView.text.FillColor = new Color(122, 68, 74);
-            BorderReyView.text.CharacterSize = 32;
-
-            BorderReyView.SetSize(new Vector2f(150, 70));
-            BorderReyView.SetPosition(new Vector2f((FormSettingGraphics.size.X - BorderReyView.size.X) - 20, 390));
-            BorderReyView.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\TableMin.png"));
 
             //Slidebar
             Slider sliderFov = new Slider(20, 150, Config.config.fov, (int Vaule) => {
-                BorderFovView.text.DisplayedString = Vaule.ToString();
+                BorderFovViewText.DisplayedString = Vaule.ToString();
                 Config.config.fov = Vaule;
             });
+            sliderFov.AddDrawble(new RectBilder(@"Resurces\Img\UI\LineP.png").Init());
+            sliderFov.LoadTextureSlider(@"Resurces\Img\UI\G.png");
             sliderFov.SetSize(new Vector2f(450, 36));
             sliderFov.SetPosition(new Vector2f(285, 310));
-            sliderFov.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\LineP.png"));
-
-            sliderFov.LoadTextureSlider(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\G.png"));
+            
 
             Slider sliderRey = new Slider(60, 1000, Config.config.numRey, (int Vaule) => {
-                BorderReyView.text.DisplayedString = Vaule.ToString();
+                BorderReyViewText.DisplayedString = Vaule.ToString();
                 Config.config.numRey = Vaule;
             });
+            sliderRey.AddDrawble(new RectBilder(@"Resurces\Img\UI\LineP.png").Init());
+            sliderRey.LoadTextureSlider(@"Resurces\Img\UI\G.png");
             sliderRey.SetSize(new Vector2f(455, 35));
             sliderRey.SetPosition(new Vector2f(280, 410));
-            sliderRey.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\LineP.png"));
-            sliderRey.LoadTextureSlider(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\G.png"));
+
 
             //Append Node
+
+            
             FormSettingGraphics.addNode(sliderFov);
             FormSettingGraphics.addNode(sliderRey);
 
-            FormSettingGraphics.addNode(BorderFovView);
-            FormSettingGraphics.addNode(BorderReyView);
+ 
 
             FormSettingGraphics.addNode(FullScrean);
             FormSettingGraphics.addNode(BorderFov);
             FormSettingGraphics.addNode(BorderFps);
             FormSettingGraphics.addNode(BorderReycast);
             FormSettingGraphics.addNode(BorderTransparantTextures);
-
+       
             FormSettingGraphics.addNode(checkBoxFPS);
             FormSettingGraphics.addNode(CheckBoxFullScrean);
             FormSettingGraphics.addNode(CheckBoxTransparantTextures);
 
-            FormSettingGraphics.SetPosition(new Vector2f((window.Size.X / 2) - FormSettingGraphics.size.X / 2, 100 + (window.Size.Y / 2) - FormSettingGraphics.size.Y / 2));
+            FormSettingGraphics.addNode(BorderFovView);
+            FormSettingGraphics.addNode(BorderReyView);
 
+            FormSettingGraphics.SetPosition(new Vector2f((window.Size.X / 2) - FormSettingGraphics.Size.X / 2, 100 + (window.Size.Y / 2) - FormSettingGraphics.Size.Y / 2));
+            sliderFov.InitSlider();
+            sliderRey.InitSlider();
             return FormSettingGraphics;
         }
-
+       
         // init form Game
-        public GuiBase InitFormSettingGame() {
-            Rectangle FormSettingGame = new Rectangle();
-            FormSettingGame.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\1.png"));
+        public UIObject InitFormSettingGame() {
+            UIObject FormSettingGame = new UIObject();
             FormSettingGame.SetSize(new Vector2f(930, 595));
+            FormSettingGame.AddDrawble(new RectBilder(@"Resurces\Img\UI\1.png").Init());
 
             // List Boxs
+            Text ListText = new TextBilder("Easily", @"Resurces\Font\Samson.ttf").CharacterSize(32).FillColor(new Color(122, 68, 74)).Init();
             ListBox listBox = new ListBox(new string[] {"Easily", "Normal", "Hard" }, 0, (int countList) => {
-                //Console.WriteLine(new string[] { "Easily", "Normal", "Hard" }[countList]);
+                ListText.DisplayedString = new string[] { "Easily", "Normal", "Hard" }[countList];
             });
-            listBox.LoadText(new Text("FPS", ResurceMeneger.LoadFont(@"Resurces\Font\Samson.ttf")));
-            listBox.text.FillColor = new Color(0, 100, 0);
-            listBox.text.CharacterSize = 32;
-
-            listBox.SetSize(new Vector2f(245, 70));
             listBox.SetPosition(new Vector2f(20, 20));
-            listBox.LoadTexture(ResurceMeneger.LoadTexture(@"Resurces\Img\UI\Table.png"));
+            listBox.SetSize(new Vector2f(245, 70));
+            listBox.AddDrawble(new RectBilder(@"Resurces\Img\UI\Table.png").Init());
+            listBox.AddDrawble(ListText);
 
             // Border
 
             // Add nodes
             FormSettingGame.addNode(listBox);
+       
+            FormSettingGame.SetPosition(new Vector2f((window.Size.X / 2) - FormSettingGame.Size.X / 2, 100 + (window.Size.Y / 2) - FormSettingGame.Size.Y / 2));
+       
+            return FormSettingGame;
+        }
 
-            FormSettingGame.SetPosition(new Vector2f((window.Size.X / 2) - FormSettingGame.size.X / 2, 100 + (window.Size.Y / 2) - FormSettingGame.size.Y / 2));
+        public UIObject InitFormSettingAudio() {
+            UIObject FormSettingGame = new UIObject();
+            FormSettingGame.SetSize(new Vector2f(930, 595));
+            FormSettingGame.AddDrawble(new RectBilder(@"Resurces\Img\UI\1.png").Init());
+
+
+            // Add nodes
+            
+
+            FormSettingGame.SetPosition(new Vector2f((window.Size.X / 2) - FormSettingGame.Size.X / 2, 100 + (window.Size.Y / 2) - FormSettingGame.Size.Y / 2));
 
             return FormSettingGame;
         }
 
         public void Render(){
-            foreach (var el in Background.GetGraphicsPackages())
-                window.Draw(el);
+            foreach (var el in Canvas.GetGraphicsPackages())
+                window.Draw((Drawable)el);
+            Canvas.EventUpdata();
         }
 
         private void MousePressed(object sender, MouseButtonEventArgs @event){
-            Background.EventMousePressed(sender,  @event);
+            Canvas.EventMousePressed(sender,  @event);
         }
         private void MouseReleased(object sender, MouseButtonEventArgs @event){
-            Background.EventMouseReleassed(sender, @event);
+            Canvas.EventMouseReleassed(sender, @event);
         }
         private void MouseMove(object sender, MouseMoveEventArgs @event){
-            Background.EventMouseMoved(sender, @event);
+            Canvas.EventMouseMoved(sender, @event);
         }
 
         //function diz connect event

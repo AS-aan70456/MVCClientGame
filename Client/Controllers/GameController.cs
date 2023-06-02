@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using SFML.System;
 using SFML.Window;
-using Client.Services;
 using Client.Models.Dungeons;
+using CoreEngine.ReyCast;
+using CoreEngine.System;
+using CoreEngine.Entitys;
 
 namespace Client.Controllers{
     class GameController : IDrawController{
@@ -18,7 +20,7 @@ namespace Client.Controllers{
 
         private ReyCastService reyCast;
 
-        private List<Enemy> enemy;
+        private List<Entity> enemy;
         private Player player;
 
         private DungeonsGenerator generator;
@@ -29,12 +31,14 @@ namespace Client.Controllers{
         public void Activation(RenderWindow window){
             window.SetMouseCursorVisible(false);
 
-            generator = new DungeonsGenerator(new Vector2i(48, 48), 8, 16);
-            level = generator.GenerateDungeon(DateTime.Now.Second);
-            enemy = new List<Enemy>();
+            generator = new DungeonsGenerator(DateTime.Now.Second);
+            level = generator.GenerateDungeon(new Vector2i(48, 48), 8, 16);
+            enemy = generator.GenerateEntity();
+
+
             player = new Player(level);
 
-            reyCast = new ReyCastService(level);
+            reyCast = new ReyCastService(level, Config.config.isTransparantTextures);
 
             View = new GameView(window, reyCast, player, enemy, level);
 
@@ -61,13 +65,18 @@ namespace Client.Controllers{
                 Button[3] = true;
             else if (@event.Code == Keyboard.Key.Q)
                 Button[4] = true;
-            else if (@event.Code == Keyboard.Key.E)
+            else if (@event.Code == Keyboard.Key.E){
                 Button[5] = true;
+                Rey[] actionRey = reyCast.ReyCastWall(player, 1, 1, 1);
+                if (actionRey[0].Wall == '4')
+                    level.Map[(int)actionRey[0].ReyPoint.Y, (int)actionRey[0].ReyPoint.X] = '5';
+            }
+            
+
             else if (@event.Code == Keyboard.Key.Escape){
                 View.window.SetMouseCursorVisible(true);
                 Router.Init().graphicsControllers.SetController(new MenuController());
             }
-
         }
 
         private void KeyReleased(object sender, KeyEventArgs @event){
@@ -90,7 +99,7 @@ namespace Client.Controllers{
         }
     
         public void Updata(){
-            Console.WriteLine(player.angleY);
+
             if (Button[0] == true)
                 player.Move(new Vector2f(0.1f, 0));
             if (Button[1] == true)
@@ -99,12 +108,6 @@ namespace Client.Controllers{
                 player.Move(new Vector2f(0, 0.04f));
             if (Button[3] == true)
                 player.Move(new Vector2f(0, -0.04f));
-            if (Button[5] == true){
-                Rey[] actionRey = reyCast.ReyCastWall(player, 1, 1, 1);
-                if (actionRey[0].Wall == '4')
-                    level.Map[(int)actionRey[0].ReyPoint.Y, (int)actionRey[0].ReyPoint.X] = '5';
-            }
-
 
         }
 
@@ -112,10 +115,10 @@ namespace Client.Controllers{
             player.Rotate(( MousePosition.X - @event.X) * 0.1f);
             float offsetY = (MousePosition.Y - @event.Y) * 0.2f;
             if (offsetY > 0)
-                if(player.angleY < 30)
+                if(player.angleY < 100)
                     player.RotateY(offsetY);
             if (offsetY <= 0)
-                if (player.angleY > -30)
+                if (player.angleY > -100)
                     player.RotateY(offsetY);
 
             MousePosition = new Vector2i(@event.X, @event.Y);

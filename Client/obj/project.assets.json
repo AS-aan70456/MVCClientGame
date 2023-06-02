@@ -310,6 +310,32 @@
         "runtime": {
           "lib/netstandard2.0/SFML.Window.dll": {}
         }
+      },
+      "CoreEngine/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "SFML.System": "2.5.0"
+        },
+        "compile": {
+          "bin/placeholder/CoreEngine.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CoreEngine.dll": {}
+        }
+      },
+      "GraphicsEngine/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "SFML.Net": "2.5.0"
+        },
+        "compile": {
+          "bin/placeholder/GraphicsEngine.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/GraphicsEngine.dll": {}
+        }
       }
     }
   },
@@ -475,10 +501,22 @@
         "sfml.window.2.5.0.nupkg.sha512",
         "sfml.window.nuspec"
       ]
+    },
+    "CoreEngine/1.0.0": {
+      "type": "project",
+      "path": "../CoreEngine/CoreEngine.csproj",
+      "msbuildProject": "../CoreEngine/CoreEngine.csproj"
+    },
+    "GraphicsEngine/1.0.0": {
+      "type": "project",
+      "path": "../GraphicsEngine/GraphicsEngine.csproj",
+      "msbuildProject": "../GraphicsEngine/GraphicsEngine.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
+      "CoreEngine >= 1.0.0",
+      "GraphicsEngine >= 1.0.0",
       "Newtonsoft.Json >= 13.0.3",
       "SFML.Net >= 2.5.0"
     ]
@@ -514,7 +552,14 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\User\\Desktop\\Prodject complite\\MVCClientServerGame\\CoreEngine\\CoreEngine.csproj": {
+              "projectPath": "C:\\Users\\User\\Desktop\\Prodject complite\\MVCClientServerGame\\CoreEngine\\CoreEngine.csproj"
+            },
+            "C:\\Users\\User\\Desktop\\Prodject complite\\MVCClientServerGame\\GraphicsEngine\\GraphicsEngine.csproj": {
+              "projectPath": "C:\\Users\\User\\Desktop\\Prodject complite\\MVCClientServerGame\\GraphicsEngine\\GraphicsEngine.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
