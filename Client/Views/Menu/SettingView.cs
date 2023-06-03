@@ -59,7 +59,7 @@ namespace Client.Views{
             UIObject audioButton = new UIObject();
             audioButton.MousePressed += (object sender, MouseButtonEventArgs @event) => {
                 int Code = Body.GetHashCode();
-                Body = GameForm;
+                Body = AudioForm;
                 Canvas.SetNode(Code, Body);
             };
             audioButton.SetSize(new Vector2f(245, 90));
@@ -74,7 +74,7 @@ namespace Client.Views{
             UIObject gameButton = new UIObject();
             gameButton.MousePressed += (object sender, MouseButtonEventArgs @event) => {
                 int Code = Body.GetHashCode();
-                Body = AudioForm;
+                Body = GameForm;
                 Canvas.SetNode(Code, Body);
             };
             gameButton.SetSize(new Vector2f(245, 90));
@@ -116,6 +116,7 @@ namespace Client.Views{
         public UIObject InitFormSettingGraphics() {
             UIObject FormSettingGraphics = new UIObject();
             FormSettingGraphics.SetSize(new Vector2f(930, 595));
+            FormSettingGraphics.SetPosition(new Vector2f((window.Size.X / 2) - FormSettingGraphics.Size.X / 2, 100 + (window.Size.Y / 2) - FormSettingGraphics.Size.Y / 2));
             FormSettingGraphics.AddDrawble(new RectBilder(@"Resurces\Img\UI\1.png").Init());
 
 
@@ -221,33 +222,26 @@ namespace Client.Views{
 
 
             //Slidebar
-            Slider sliderFov = new Slider(20, 150, Config.config.fov, (int Vaule) => {
+            Slider sliderFov = new Slider(20, 150, Config.config.fov, @"Resurces\Img\UI\G.png",(int Vaule) => {
                 BorderFovViewText.DisplayedString = Vaule.ToString();
                 Config.config.fov = Vaule;
             });
             sliderFov.AddDrawble(new RectBilder(@"Resurces\Img\UI\LineP.png").Init());
-            sliderFov.LoadTextureSlider(@"Resurces\Img\UI\G.png");
             sliderFov.SetSize(new Vector2f(450, 36));
             sliderFov.SetPosition(new Vector2f(285, 310));
             
 
-            Slider sliderRey = new Slider(60, 1000, Config.config.numRey, (int Vaule) => {
+            Slider sliderRey = new Slider(60, 1000, Config.config.numRey, @"Resurces\Img\UI\G.png", (int Vaule) => {
                 BorderReyViewText.DisplayedString = Vaule.ToString();
                 Config.config.numRey = Vaule;
             });
             sliderRey.AddDrawble(new RectBilder(@"Resurces\Img\UI\LineP.png").Init());
-            sliderRey.LoadTextureSlider(@"Resurces\Img\UI\G.png");
             sliderRey.SetSize(new Vector2f(455, 35));
             sliderRey.SetPosition(new Vector2f(280, 410));
 
-
             //Append Node
-
-            
             FormSettingGraphics.addNode(sliderFov);
             FormSettingGraphics.addNode(sliderRey);
-
- 
 
             FormSettingGraphics.addNode(FullScrean);
             FormSettingGraphics.addNode(BorderFov);
@@ -262,9 +256,6 @@ namespace Client.Views{
             FormSettingGraphics.addNode(BorderFovView);
             FormSettingGraphics.addNode(BorderReyView);
 
-            FormSettingGraphics.SetPosition(new Vector2f((window.Size.X / 2) - FormSettingGraphics.Size.X / 2, 100 + (window.Size.Y / 2) - FormSettingGraphics.Size.Y / 2));
-            sliderFov.InitSlider();
-            sliderRey.InitSlider();
             return FormSettingGraphics;
         }
        

@@ -16,6 +16,8 @@ namespace GraphicsEngine{
         public Action<object, MouseMoveEventArgs> MouseMoved;
         public Action Updata;
 
+        public Action Start;
+
         private List<Transformable> Drawables;
         private List<UIObject> nods;
 
@@ -37,25 +39,22 @@ namespace GraphicsEngine{
             SetSize(Size);
         }
 
-        private bool CheckPressed(Vector2i MousePos){
+        public bool CheckPressed(Vector2i MousePos){
             if ((MousePos.X > AbsolutPosition.X && MousePos.Y > AbsolutPosition.Y) && (MousePos.X < AbsolutPosition.X + Size.X && MousePos.Y < AbsolutPosition.Y + Size.Y))
                 return true;
-            
             return false;
         }
 
         public void SetPosition(Vector2f Position){
             this.Position = Position;
             this.AbsolutPosition = Position;
-
             SetPositionUI();
-
             foreach (var el in nods)
                 el.SetPositionAbsolute(Position);
         }
 
         protected void SetPositionAbsolute(Vector2f Position){
-            this.AbsolutPosition = Position += this.Position;
+            this.AbsolutPosition = Position + this.Position;
             SetPositionUI();
             foreach (var el in nods)
                 el.SetPositionAbsolute(AbsolutPosition);
@@ -80,12 +79,9 @@ namespace GraphicsEngine{
             }
         }
 
-        public virtual IEnumerable<Transformable> GiveAweyGraphicsPackages(){ return new List<Transformable>(); }
-
         public IEnumerable<Transformable> GetGraphicsPackages(){
             List<Transformable> Packages = new List<Transformable>();
             Packages.AddRange(Drawables);
-            Packages.AddRange(GiveAweyGraphicsPackages());
             foreach (var el in nods)
                 Packages.AddRange(el.GetGraphicsPackages());
             return Packages;
@@ -141,7 +137,9 @@ namespace GraphicsEngine{
         }
 
         public void addNode(UIObject newNode){
+            newNode.SetPositionAbsolute(AbsolutPosition);
             nods.Add(newNode);
+            newNode.Start?.Invoke();
         }
 
         public void removeNode(UIObject newNode) => nods.Remove(newNode);
