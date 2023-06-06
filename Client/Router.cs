@@ -7,10 +7,6 @@ using SFML.Window;
 
 namespace Client{
     class Router{
-        private RenderWindow window;
-
-        public bool IsOpen { get { return window.IsOpen; } }
-
         public GraphicsController graphicsControllers { get; private set; }
         public PlayersController playersControl { get; }
 
@@ -18,12 +14,7 @@ namespace Client{
 
         private Router() {
 
-            if (Config.config.isFullScrean)
-                InitFullScrean();
-            else
-                InitScrean();
-
-            graphicsControllers = new GraphicsController(window);
+            graphicsControllers = new GraphicsController();
             playersControl = new PlayersController();
         }
 
@@ -31,22 +22,6 @@ namespace Client{
             if (router == null)
                 router = new Router();
             return router;
-        }
-
-        public void InitFullScrean() {
-            window?.Close();
-            window = new RenderWindow(new VideoMode(480, 360), "MVC_SFML", Styles.Fullscreen);
-
-            graphicsControllers?.UpdataWindow(window);
-            graphicsControllers?.SetController(graphicsControllers.gameController);
-
-        }
-
-        public void InitScrean(){
-            window?.Close();
-            window = new RenderWindow(new VideoMode(1080, 720), "MVC_SFML");
-            graphicsControllers?.UpdataWindow(window);
-            graphicsControllers?.SetController(graphicsControllers.gameController);
         }
     }
 }

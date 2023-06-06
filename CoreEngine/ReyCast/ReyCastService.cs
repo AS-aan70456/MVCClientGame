@@ -9,12 +9,24 @@ namespace CoreEngine.ReyCast{
     // service for calculating the length distance between the player and the walls
     public class ReyCastService {
 
+
+        private TopRey topReyStrategic;
+        private DownRey downReyStrategic;
+        private LeftRey leftReyStrategic;
+        private RightRey rightReyStrategic;
+
+
         private Level level;
         private bool isTransparantTextures;
 
         public ReyCastService(Level level, bool isTransparantTextures) {
             this.level = level;
             this.isTransparantTextures = isTransparantTextures;
+
+            topReyStrategic = new TopRey();
+            downReyStrategic = new DownRey();
+            leftReyStrategic = new LeftRey();
+            rightReyStrategic = new RightRey();
         }
 
 
@@ -24,9 +36,9 @@ namespace CoreEngine.ReyCast{
 
             for (int i = 0; i < CountRey; i++) {
                 float ReyAngle = (entity.angle + fov / 2 - i * fov / CountRey);
-                Vector3f vector3F = entity.Position + (entity.Size / 2);
+                Vector2f vector2F = entity.Position + (entity.Size / 2);
                 ReySettings reySettings = new ReySettings(){
-                    Position = new Vector2f(vector3F.X, vector3F.Y),
+                    Position = new Vector2f(vector2F.X, vector2F.Y),
                     angle = ReyAngle,
                     originAngle = ReyAngle,
                     entityAngle = entity.angle,
@@ -34,7 +46,6 @@ namespace CoreEngine.ReyCast{
                 };
 
                 result[i] = ReyPush(reySettings);
-                //result[i].ReyDistance /= MathF.Cos(i/fov);
             }
 
             return result;
@@ -48,22 +59,22 @@ namespace CoreEngine.ReyCast{
 
             if (MathF.Sin((settings.angle * MathF.PI) / 180) > 0) {
                 if (MathF.Cos((settings.angle * MathF.PI) / 180) > 0) {
-                    ReyVertical = ReyPushStrategy(new ReySettings(settings).SetStrategy(new LeftRey()));
-                    ReyHorizontal = ReyPushStrategy(new ReySettings(settings).SetStrategy(new TopRey()));
+                    ReyVertical = ReyPushStrategy(new ReySettings(settings).SetStrategy(leftReyStrategic));
+                    ReyHorizontal = ReyPushStrategy(new ReySettings(settings).SetStrategy(topReyStrategic));
                 }
                 else {
-                    ReyVertical = ReyPushStrategy(new ReySettings(settings).SetStrategy(new TopRey()));
-                    ReyHorizontal = ReyPushStrategy(new ReySettings(settings).SetStrategy(new RightRey()));
+                    ReyVertical = ReyPushStrategy(new ReySettings(settings).SetStrategy(topReyStrategic));
+                    ReyHorizontal = ReyPushStrategy(new ReySettings(settings).SetStrategy(rightReyStrategic));
                 }
             }
             else {
                 if (MathF.Cos((settings.angle * MathF.PI) / 180) < 0) {
-                    ReyVertical = ReyPushStrategy(new ReySettings(settings).SetStrategy(new RightRey()));
-                    ReyHorizontal = ReyPushStrategy(new ReySettings(settings).SetStrategy(new DownRey()));
+                    ReyVertical = ReyPushStrategy(new ReySettings(settings).SetStrategy(rightReyStrategic));
+                    ReyHorizontal = ReyPushStrategy(new ReySettings(settings).SetStrategy(downReyStrategic));
                 }
                 else {
-                    ReyVertical = ReyPushStrategy(new ReySettings(settings).SetStrategy(new DownRey()));
-                    ReyHorizontal = ReyPushStrategy(new ReySettings(settings).SetStrategy(new LeftRey()));
+                    ReyVertical = ReyPushStrategy(new ReySettings(settings).SetStrategy(downReyStrategic));
+                    ReyHorizontal = ReyPushStrategy(new ReySettings(settings).SetStrategy(leftReyStrategic));
                 }
             }
 
@@ -99,14 +110,18 @@ namespace CoreEngine.ReyCast{
 
                 if (!Level.IsVoid(result.Wall)) {
 
-                    result.offset = settings.strategy.GetOfset(ReyPos);
-                    result.ReyPoint = ReyPos;
+                    if (Level.Ishalf(result.Wall) && isTransparantTextures)
+                        ReyPos += settings.strategy.NextReyPos(settings.angle) / 2;
 
                     if (Level.IsTransparent(result.Wall) && isTransparantTextures){
                         settings.Position = ReyPos;
                         settings.angle = settings.originAngle;
                         result.rey = ReyPush(settings);
+                        
                     }
+
+                    result.offset = settings.strategy.GetOfset(ReyPos);
+                    result.ReyPoint = ReyPos;
 
                     return result;
                 }

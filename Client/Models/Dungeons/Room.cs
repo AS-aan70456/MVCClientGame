@@ -29,10 +29,15 @@ namespace Client.Models.Dungeons{
 
             for (int i = 0; i < Size.Y; i++){
                 for (int j = 0; j < Size.X; j++){
-                    if(i == 0 || j == 0 || i == Size.Y - 1 || j == Size.X - 1)
-                        room.Structure[j, i] = '1';
-                    else
+                    if (i == 0 || j == 0 || i == Size.Y - 1 || j == Size.X - 1){
+                        if ((i + j) % 5 == 0)
+                            room.Structure[j, i] = '6';
+                        else
+                            room.Structure[j, i] = '1';
+                    }
+                    else{
                         room.Structure[j, i] = ' ';
+                    }
                 }
             }
 

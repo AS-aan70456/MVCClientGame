@@ -1,0 +1,11 @@
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\bin\Release\net5.0\CoreEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\bin\Release\net5.0\ref\CoreEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\bin\Release\net5.0\CoreEngine.pdb
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Release\net5.0\CoreEngine.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Release\net5.0\CoreEngine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Release\net5.0\CoreEngine.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Release\net5.0\CoreEngine.AssemblyInfo.cs
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Release\net5.0\CoreEngine.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Release\net5.0\CoreEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Release\net5.0\ref\CoreEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Release\net5.0\CoreEngine.pdb

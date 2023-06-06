@@ -145,10 +145,10 @@ namespace Client.Views{
 
             CheckBox CheckBoxFullScrean = new CheckBox(
                 () => { Config.config.isFullScrean = true;
-                    Router.Init().InitFullScrean();
+                    Router.Init().graphicsControllers.InitFullScrean();
                     },
                 () => { Config.config.isFullScrean = false;
-                    Router.Init().InitScrean();
+                    Router.Init().graphicsControllers.InitScrean();
                 },
 
                 @"Resurces\Img\UI\CheckF.png",

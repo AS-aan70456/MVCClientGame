@@ -5,9 +5,11 @@ using System;
 namespace CoreEngine.Entitys{
     public abstract class Entity{
 
-        public Vector3f Position { get; set; }
-        public Vector3f Size { get; protected set; }
+        public Vector2f Position { get; protected set; }
+        public Vector2f Size { get; protected set; }
         public float angle { get; protected set; }
+
+        public float PositionZ { get; protected set; }
 
         private Level Level;
 
@@ -41,8 +43,8 @@ namespace CoreEngine.Entitys{
             Y = ((float)((MathF.Sin((((angle) * MathF.PI) / 180)) * velocity.X)));
             Y1 = ((float)((MathF.Sin((((90 - angle) * MathF.PI) / 180)) * velocity.Y)));
 
-            Position -= new Vector3f(0, Y, 0);
-            Position -= new Vector3f(0, Y1, 0);
+            Position -= new Vector2f(0, Y);
+            Position -= new Vector2f(0, Y1);
 
             float dy = Position.Y;
             // Collision Y
@@ -60,10 +62,10 @@ namespace CoreEngine.Entitys{
                 }
             }
 
-            Position = new Vector3f(Position.X, dy, 0);
+            Position = new Vector2f(Position.X, dy);
 
-            Position -= new Vector3f(X, 0, 0);
-            Position -= new Vector3f(X1, 0, 0);
+            Position -= new Vector2f(X, 0);
+            Position -= new Vector2f(X1, 0);
 
             float dx = Position.X;
             // Collision X
@@ -82,7 +84,7 @@ namespace CoreEngine.Entitys{
             }
 
 
-            Position = new Vector3f(dx, Position.Y, 0);
+            Position = new Vector2f(dx, Position.Y);
         }
 
         public void Rotate(float angle){

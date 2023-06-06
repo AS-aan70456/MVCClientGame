@@ -34,5 +34,10 @@ namespace CoreEngine.ReyCast
         {
             return (float)(pos.X - (int)pos.X);
         }
+
+        public Vector2f GetSide()
+        {
+            return new Vector2f(0, -1);
+        }
     }
 }

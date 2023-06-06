@@ -20,7 +20,7 @@ namespace Client.Controllers{
 
         private ReyCastService reyCast;
 
-        private List<Entity> enemy;
+        private List<Entity> entities;
         private Player player;
 
         private DungeonsGenerator generator;
@@ -32,15 +32,15 @@ namespace Client.Controllers{
             window.SetMouseCursorVisible(false);
 
             generator = new DungeonsGenerator(DateTime.Now.Second);
-            level = generator.GenerateDungeon(new Vector2i(48, 48), 8, 16);
-            enemy = generator.GenerateEntity();
-
+            level = generator.GenerateDungeon(new Vector2i(32, 48), 8, 8);
+            entities = generator.GenerateEntity();
 
             player = new Player(level);
 
+
             reyCast = new ReyCastService(level, Config.config.isTransparantTextures);
 
-            View = new GameView(window, reyCast, player, enemy, level);
+            View = new GameView(window, reyCast, player, entities, level);
 
             Button = new bool[6];
 
@@ -112,7 +112,7 @@ namespace Client.Controllers{
         }
 
         private void MouseMoved(object sender, MouseMoveEventArgs @event) {
-            player.Rotate(( MousePosition.X - @event.X) * 0.1f);
+            player.Rotate(( MousePosition.X - @event.X) * 0.03f);
             float offsetY = (MousePosition.Y - @event.Y) * 0.2f;
             if (offsetY > 0)
                 if(player.angleY < 100)

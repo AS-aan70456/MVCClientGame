@@ -7,7 +7,9 @@ namespace CoreEngine.System{
 
         public Vector2i Size { get; private set; }
         public char[,] Map { get; set; }
+
         private static char[] Void;
+        private static char[] Half;
         private static char[] Transparent;
         private static char[] Collision;
 
@@ -22,6 +24,7 @@ namespace CoreEngine.System{
             Void = new char[] { ' ' };
             Transparent = new char[] { '3', '5' };
             Collision = new char[] { '1', '2', '3', '4' };
+            Half = new char[] { '3', '4', '5' };
         }
 
         public static bool IsVoid(char Cell) {
@@ -34,6 +37,10 @@ namespace CoreEngine.System{
 
         public static bool IsCollision(char Cell){
             for (int i = 0; i < Collision.Length; i++) if (Cell == Collision[i]) return true; return false;
+        }
+
+        public static bool Ishalf(char Cell){
+            for (int i = 0; i < Half.Length; i++) if (Cell == Half[i]) return true; return false;
         }
     }
 }

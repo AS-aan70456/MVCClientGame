@@ -6,8 +6,8 @@ namespace CoreEngine.Entitys{
     {
         public Level Level { get; set; }
 
-        public Vector3f Position { get; set; }
-        public Vector3f Size { get; set; }
+        public Vector2f Position { get; set; }
+        public Vector2f Size { get; set; }
         public float angle { get; set; }
     }
 }

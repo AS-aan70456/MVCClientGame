@@ -50,21 +50,16 @@ namespace Client.Models.Dungeons{
                 for (int j = 0; j < _Rand.Next(2); j++) {
 
                     Vector2f EntityPos = new Vector2f(
-                        rooms[i].Position.X + _Rand.Next(rooms[i].Size.X - 2) + 1,
-                        rooms[i].Position.Y + _Rand.Next(rooms[i].Size.Y - 2) + 1
+                        rooms[i].Position.X + _Rand.Next(rooms[i].Size.X - 6) + 3,
+                        rooms[i].Position.Y + _Rand.Next(rooms[i].Size.Y - 6) + 3
                     );
                     Enemy enemy = new Enemy(new EntitySettings() {
-                        Position = new Vector3f(EntityPos.X, EntityPos.Y, 0)
-
+                        Level = Level,
+                        Position = new Vector2f(EntityPos.X, EntityPos.Y),
+                        Size = new Vector2f(0.5f, 0.5f)
                     });
                     entities.Add(enemy);
-
-
                 }
-
-                
-
-
             }
 
             return entities;
@@ -74,7 +69,7 @@ namespace Client.Models.Dungeons{
         private void GenerateChank() {
             Vector2i chankPos = new Vector2i();
             for (int y = 0; y < dungeonSize.Y / chankSize; y++) {
-                for (int x = 0; x < dungeonSize.Y / chankSize; x++){
+                for (int x = 0; x < dungeonSize.X / chankSize; x++){
                     chankPos.X = x * chankSize;
                     chankPos.Y = y * chankSize;
                     chanks.Add(new Chank(chankPos));
@@ -94,8 +89,8 @@ namespace Client.Models.Dungeons{
         }
 
         private void GenerateRoom() {
-            int minRoom = (int)(chankSize / 2.5f);
-            int maxRoom = (int)(chankSize / 1f);
+            int minRoom = (int)(chankSize * 1.1f);
+            int maxRoom = (int)(chankSize * 1.5f);
 
             for (int i = 0; i < roomCount; i++){
                 Room room = Room.GenerateRoom(
@@ -109,12 +104,14 @@ namespace Client.Models.Dungeons{
             }
         }
 
-        public char[,] CreateCorridor(char[,] Dangeons) {
+        private char[,] CreateCorridor(char[,] Dangeons) {
             List<NodeData> endPoinds = graph.GetDataNode();
 
             foreach (var el in endPoinds) {
                 Vector2i currentPos = el.StartPos;
                 Vector2i leght = el.StartPos - el.EndPos;
+
+                bool IsCreateDoor = false;
 
                 int offsetX;
                 if (leght.X > 0) 
@@ -128,25 +125,41 @@ namespace Client.Models.Dungeons{
                 else
                     offsetY = 1;
 
-                for (int x = 0; x < Math.Abs(leght.X); x++) {
-                    
-                    if(Dangeons[currentPos.X, currentPos.Y] == '1')
-                        Dangeons[currentPos.X, currentPos.Y] = '4';
-                    else
-                        Dangeons[currentPos.X, currentPos.Y] = ' ';
-                    currentPos.X += offsetX;
-                }
-                for (int y = 0; y < Math.Abs(leght.Y); y++){
- 
-                    if (Dangeons[currentPos.X, currentPos.Y] == '1')
-                        Dangeons[currentPos.X, currentPos.Y] = '4';
-                    else
-                        Dangeons[currentPos.X, currentPos.Y] = ' ';
+                for (int x = 0; x < Math.Abs(leght.Y); x++) {
+
+                    char currentWall = Dangeons[currentPos.Y, currentPos.X];
+
+                    if ((currentWall == '1' || currentWall == '4' || currentWall == '6') && !IsCreateDoor) {
+                        Dangeons[currentPos.Y, currentPos.X] = '4';
+                        IsCreateDoor = true;
+                    }
+                    else{
+                        Dangeons[currentPos.Y, currentPos.X] = ' ';
+                        IsCreateDoor = false;
+                    }
                     currentPos.Y += offsetY;
+                }
+                for (int y = 0; y < Math.Abs(leght.X); y++){
+
+                    char currentWall = Dangeons[currentPos.Y, currentPos.X];
+
+                    if ((currentWall == '1' || currentWall == '4' || currentWall == '6') && !IsCreateDoor){
+                        Dangeons[currentPos.Y, currentPos.X] = '4';
+                        IsCreateDoor = true;
+                    }
+                    else{
+                        Dangeons[currentPos.Y, currentPos.X] = ' ';
+                        IsCreateDoor = false;
+                    }
+                    currentPos.X += offsetX;
                 }
 
             }
             return Dangeons;
+        }
+
+        private void CreateWindows() {
+        
         }
 
         private char[,] RoomsToCharArry(List<Room> rooms) {
@@ -165,31 +178,22 @@ namespace Client.Models.Dungeons{
 
             Vector2i Size = (-MinSize) + MaxSize;
 
-            result = new char[Size.X + 2, Size.Y + 2];
+            result = new char[Size.Y, Size.X];
 
             for (int y = 0; y < Size.Y; y++)
-            {
                 for (int x = 0; x < Size.X; x++)
-                {
-                    result[x, y] = '2';
-                }
-            }
+                    result[y, x] = '2';
 
             for (int room = 0; room < rooms.Count; room++)
-            {
                 for (int i = (rooms[room].Position.Y) + (-MinSize.Y); i < (rooms[room].Position.Y + rooms[room].Size.Y) + (-MinSize.Y); i++)
-                {
                     for (int j = (rooms[room].Position.X) + (-MinSize.X); j < (rooms[room].Position.X + rooms[room].Size.X) + (-MinSize.X); j++)
-                    {
-                        result[j, i] = rooms[room].Structure[j - ((rooms[room].Position.X) + (-MinSize.X)), i - ((rooms[room].Position.Y) + (-MinSize.Y))];
-                    }
-                }
 
-            }
-
+                        result[i, j] = rooms[room].Structure[
+                            j - ((rooms[room].Position.X) + (-MinSize.X))
+                            , i - ((rooms[room].Position.Y) + (-MinSize.Y))
+                        ];
+     
             return result;
         }
-
-
     }
 }

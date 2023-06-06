@@ -57,6 +57,10 @@ namespace GraphicsEngine.Resurces{
                     return LoadTexture(@"Resurces\Img\Walss\Door.png");
                 case '5':
                     return LoadTexture(@"Resurces\Img\Walss\DoorOpen.png");
+                case '6':
+                    return LoadTexture(@"Resurces\Img\Walss\Column.png");
+                case '7':
+                    return LoadTexture(@"Resurces\Img\Walss\touches.png");
                 default:
                     return LoadTexture(@"Resurces\Img\Walss\Flore.jpg");
             }

@@ -13,9 +13,11 @@ namespace Client.Controllers{
     //Costile between sfml and my architecture
     class GraphicsController{
         private RenderWindow window;
+
         public IDrawController gameController { get; private set; }
         private Clock Clock;
 
+        public bool IsOpen { get { return window.IsOpen; } }
         public float time { get; private set; }
         public float fps { get; private set; }
 
@@ -23,8 +25,12 @@ namespace Client.Controllers{
         private Time previousTime;
         private Time curentTime;
 
-        public  GraphicsController(RenderWindow window){
-            this.window = window;
+        public  GraphicsController(){
+            if (Config.config.isFullScrean)
+                InitFullScrean();
+            else
+                InitScrean();
+
             this.window.Closed += new EventHandler(Close);
 
             Clock = new Clock();
@@ -33,8 +39,7 @@ namespace Client.Controllers{
             previousTime = clockFps.ElapsedTime;
         }
 
-        public void UpdataWindow(RenderWindow window) {
-            this.window = window;
+        public void UpdataWindow() {
             this.window.Closed += new EventHandler(Close);
         }
 
@@ -49,9 +54,7 @@ namespace Client.Controllers{
 
         //Updata scene
         private void Updata() {
-            Router router = Router.Init();
-
-            while (router.IsOpen) {
+            while (window.IsOpen) {
                 window.Clear();
 
                 time = Clock.ElapsedTime.AsMicroseconds();
@@ -68,6 +71,21 @@ namespace Client.Controllers{
                 window.Display();
                 window.DispatchEvents();
             }
+        }
+
+        public void InitFullScrean(){
+            window?.Close();
+            window = new RenderWindow(new VideoMode(480, 360), "MVC_SFML", Styles.Fullscreen);
+            UpdataWindow();
+            gameController?.Activation(window);
+
+        }
+
+        public void InitScrean(){
+            window?.Close();
+            window = new RenderWindow(new VideoMode(1080, 720), "MVC_SFML", Styles.Close);
+            UpdataWindow();
+            gameController?.Activation(window);
         }
 
         private void Close(object sender, EventArgs @event) {
