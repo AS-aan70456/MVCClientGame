@@ -47,6 +47,8 @@ namespace GraphicsEngine.Resurces{
 
         public static Texture GetTexture(char ch){
             switch (ch){
+                case '0':
+                    return LoadTexture(@"Resurces\Img\Walss\Wall.png");
                 case '1':
                     return LoadTexture(@"Resurces\Img\Walss\Wall2.png");
                 case '2':
@@ -62,7 +64,7 @@ namespace GraphicsEngine.Resurces{
                 case '7':
                     return LoadTexture(@"Resurces\Img\Walss\touches.png");
                 default:
-                    return LoadTexture(@"Resurces\Img\Walss\Flore.jpg");
+                    return LoadTexture(@"Resurces\Img\Flore\Flore.jpg");
             }
         }
     }

@@ -9,7 +9,7 @@ namespace CoreEngine.Entitys
 
         public Player(Level level) : base(level){
             Position = new Vector2f(level.SpawnPoint.X, level.SpawnPoint.Y);
-            Size = new Vector2f(0.7f, 0.7f);
+            Size = new Vector2f(0.5f, 0.5f);
             PositionZ = 0.5f;
         }
 

@@ -222,7 +222,7 @@ namespace Client.Views{
 
 
             //Slidebar
-            Slider sliderFov = new Slider(20, 150, Config.config.fov, @"Resurces\Img\UI\G.png",(int Vaule) => {
+            Slider sliderFov = new Slider(40, 80, Config.config.fov, @"Resurces\Img\UI\G.png",(int Vaule) => {
                 BorderFovViewText.DisplayedString = Vaule.ToString();
                 Config.config.fov = Vaule;
             });

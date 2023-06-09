@@ -23,7 +23,7 @@ namespace CoreEngine.System{
 
             Void = new char[] { ' ' };
             Transparent = new char[] { '3', '5' };
-            Collision = new char[] { '1', '2', '3', '4' };
+            Collision = new char[] {'0', '1', '2', '3', '4' };
             Half = new char[] { '3', '4', '5' };
         }
 

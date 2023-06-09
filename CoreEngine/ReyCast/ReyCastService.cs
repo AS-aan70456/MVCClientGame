@@ -1,5 +1,4 @@
-﻿using Client.Models;
-using CoreEngine.Entitys;
+﻿using CoreEngine.Entitys;
 using CoreEngine.System;
 using SFML.System;
 using System;
@@ -31,14 +30,14 @@ namespace CoreEngine.ReyCast{
 
 
         //the service interface executes the firing of beams according to the given instructions
-        public Rey[] ReyCastWall(Entity entity, float fov, float depth, int CountRey) {
+        public ReyContainer[] ReyCastWall(Entity entity, float fov, float depth, int CountRey) {
             Rey[] result = new Rey[CountRey];
 
             for (int i = 0; i < CountRey; i++) {
                 float ReyAngle = (entity.angle + fov / 2 - i * fov / CountRey);
-                Vector2f vector2F = entity.Position + (entity.Size / 2);
+
                 ReySettings reySettings = new ReySettings(){
-                    Position = new Vector2f(vector2F.X, vector2F.Y),
+                    Position = entity.Position + (entity.Size / 2),
                     angle = ReyAngle,
                     originAngle = ReyAngle,
                     entityAngle = entity.angle,
@@ -78,75 +77,88 @@ namespace CoreEngine.ReyCast{
                 }
             }
 
-            ReyVertical = GetDistance(settings.Position, ReyVertical, ((settings.angle - settings.entityAngle) * MathF.PI) / 180);
-            ReyHorizontal = GetDistance(settings.Position, ReyHorizontal, ((settings.angle - settings.entityAngle) * MathF.PI) / 180);
+            //ReyVertical = GetDistance(settings.Position, ReyVertical, ((settings.angle - settings.entityAngle) * MathF.PI) / 180);
+            //ReyHorizontal = GetDistance(settings.Position, ReyHorizontal, ((settings.angle - settings.entityAngle) * MathF.PI) / 180);
 
 
             //length check between vertical and horizontal reys
-            if (ReyVertical.ReyDistance < ReyHorizontal.ReyDistance)
-                return ReyVertical;
-            else
-                return ReyHorizontal;
+            return Rey.HitDistribution(ReyHorizontal, ReyVertical, settings);
         }
 
         //function iterates beam radiation
         private Rey ReyPushStrategy(ReySettings settings) {
             Rey result = new Rey();
 
-            Vector2f ReyPos = settings.strategy.StartReyPos(settings.Position, settings.angle);
+            Vector2f reyPos = settings.strategy.StartReyPos(settings.Position, settings.angle);
+            char reyWall = ' ';
 
             for (int i = 0; i < settings.depth; i++) {
 
-                if (ReyPos.X < 0 || ReyPos.Y < 0 || ReyPos.X > level.Size.Y - 1|| ReyPos.Y > level.Size.X - 1) {
-                    result.ReyDistance = settings.depth;
-                    result.ReyPoint = ReyPos;
+                if (reyPos.X < 0 || reyPos.Y < 0 || reyPos.X > level.Size.Y - 1|| reyPos.Y > level.Size.X - 1) {
+                    result.Hit(new HitWall() {
+                        ReyDistance = GetDistance(reyPos, settings.Position),
+                        ReyPoint = reyPos,
+                        Wall = '0'
+                    });
                     return result;
                 }
 
-                try { result.Wall = level.Map[(int)ReyPos.Y, (int)ReyPos.X]; }
-                catch (Exception) {
-                    break;
+                reyWall = level.Map[(int)reyPos.Y, (int)reyPos.X]; 
+                
+
+                if (!Level.IsVoid(reyWall)) {
+
+                    HitWall hit = new HitWall(reyPos);
+
+                    if (Level.Ishalf(reyWall))
+                        hit.ReyPoint += settings.strategy.NextReyPos(settings.angle) / 2;
+                    
+                    hit.ReyDistance = GetDistance(hit.ReyPoint, settings.Position);
+                    hit.offset = settings.strategy.GetOfset(hit.ReyPoint);
+                    hit.Wall = reyWall;
+
+                    result.Hit(hit);
+
+                    if (!Level.IsTransparent(reyWall) || !isTransparantTextures)
+                        return result;
+
                 }
 
-                if (!Level.IsVoid(result.Wall)) {
+                result.Hit(new HitFlore(){
+                    ReyDistance = GetDistance(reyPos, settings.Position),
+                    ReyPoint = reyPos,
+                    Wall = reyWall,
+                });
 
-                    if (Level.Ishalf(result.Wall) && isTransparantTextures)
-                        ReyPos += settings.strategy.NextReyPos(settings.angle) / 2;
+                reyPos += settings.strategy.NextReyPos(settings.angle);
 
-                    if (Level.IsTransparent(result.Wall) && isTransparantTextures){
-                        settings.Position = ReyPos;
-                        settings.angle = settings.originAngle;
-                        result.rey = ReyPush(settings);
-                        
-                    }
-
-                    result.offset = settings.strategy.GetOfset(ReyPos);
-                    result.ReyPoint = ReyPos;
-
-                    return result;
-                }
-                ReyPos += settings.strategy.NextReyPos(settings.angle);
             }
-            result.offset = settings.strategy.GetOfset(ReyPos);
-            result.ReyPoint = ReyPos;
+
+            result.Hit(new HitWall(){
+                ReyDistance = GetDistance(
+                    new Vector3f(reyPos.X, reyPos.Y, 0),
+                    new Vector3f(settings.Position.X, settings.Position.Y, 0.5f)
+                ),
+                ReyPoint = reyPos,
+                Wall = '0'
+            });
 
             return result;
         }
 
         //length check between vertical and horizontal beam reys
-        private Rey GetDistance(Vector2f Position, Rey rey, float angle) {
 
-            if (rey.rey != null) {
-                rey.rey = GetDistance(Position, rey.rey, angle);
-            }
+        private float GetDistance(Vector2f PosA, Vector2f PosB) {
+            return MathF.Abs(MathF.Sqrt(MathF.Pow(PosA.X - PosB.X, 2) + MathF.Pow(PosA.Y - PosB.Y, 2)));
+        }
 
-            float a = (rey.ReyPoint.Y - Position.Y);
-            float b = (rey.ReyPoint.X - Position.X);
-            rey.ReyDistance = MathF.Abs(MathF.Sqrt((a * a) + (b * b))) * MathF.Cos(angle);
-            return rey;
+        private float GetDistance(Vector3f PosA, Vector3f PosB){
+            return MathF.Abs(MathF.Sqrt(MathF.Pow(PosA.X - PosB.X, 2) + MathF.Pow(PosA.Y - PosB.Y, 2) + MathF.Pow(PosA.Z - PosB.Z, 2)));
         }
 
     }
+
+    
 
     class ReySettings {
         public IStrategyReyCanculate strategy { get; private set; }

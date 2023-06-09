@@ -67,9 +67,15 @@ namespace Client.Controllers{
                 Button[4] = true;
             else if (@event.Code == Keyboard.Key.E){
                 Button[5] = true;
-                Rey[] actionRey = reyCast.ReyCastWall(player, 1, 1, 1);
-                if (actionRey[0].Wall == '4')
-                    level.Map[(int)actionRey[0].ReyPoint.Y, (int)actionRey[0].ReyPoint.X] = '5';
+                ReyContainer[] actionRey = reyCast.ReyCastWall(player, 1, 1, 1);
+
+                Vector2f ReyPosition = actionRey[0].GetLastHit(new HitWall()).ReyPoint;
+
+                if (level.Map[(int)ReyPosition.Y, (int)ReyPosition.X] == '4')
+                    level.Map[
+                        (int)actionRey[0].GetLastHit(new HitWall()).ReyPoint.Y,
+                        (int)actionRey[0].GetLastHit(new HitWall()).ReyPoint.X
+                    ] = '5';
             }
             
 

@@ -78,3 +78,7 @@ C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\obj\Debug\net
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\Debug\net5.0\SFML.Audio.dll
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\Debug\net5.0\Client.deps.json
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\Debug\net5.0\CoreEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\Debug\net5.0\GraphicsEngine.dll
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\Debug\net5.0\CoreEngine.pdb
+C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\Client\bin\Debug\net5.0\GraphicsEngine.pdb

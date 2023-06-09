@@ -32,6 +32,7 @@ namespace Client{
 
         public override string ToString(){
             return JsonConvert.SerializeObject(config);
+
         }
     }
 }
