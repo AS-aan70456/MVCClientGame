@@ -1,29 +1,31 @@
 ﻿using SFML.System;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Client.Models.Dungeons{
-    class Chank{
+namespace Client.Models.Dungeons
+{
+    // Represents a chunk in the dungeon
+    class Chank
+    {
 
-        public Vector2i Position { get; private set; }
+        public Vector2i Position { get; private set; } // The position of the chunk
 
-        private Room room;
+        private Room room; // The associated room within the chunk
 
-        public Room Room { 
-            get {
+        public Room Room
+        {
+            get
+            {
                 if (room != null)
-                    return room;
+                    return room; // Return the associated room if set
                 else
-                    return new Room();
+                    return new Room(); // Return an empty room if room is not set
             }
-            set { room = value; }
+            set { room = value; } // Set the associated room
         }
 
-        public Chank(Vector2i Position) {
-            this.Position = Position;
+        public Chank(Vector2i Position)
+        {
+            this.Position = Position; // Initialize the position of the chunk
         }
 
     }

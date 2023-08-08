@@ -4,49 +4,61 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GraphicsEngine.Resurces{
+namespace GraphicsEngine.Resurces
+{
 
-    //makes sure that only one texture is loaded into applications
-    public static class ResurceMeneger{
+    // Resource Manager class for handling resources
+    public static class ResurceMeneger
+    {
 
-        static private List<IResurce> resurce;
+        static private List<IResurce> resurce; // List to store loaded resources
 
-        static ResurceMeneger() {
-            resurce = new List<IResurce>();
+        static ResurceMeneger()
+        {
+            resurce = new List<IResurce>(); // Initialize the list of resources
         }
 
-        static public Texture LoadTexture(string path) {
+        // Load a texture
+        static public Texture LoadTexture(string path)
+        {
             TextureItem texture = (TextureItem)resurce.FirstOrDefault(e => e.path == path);
 
             if (texture != default)
-                return (Texture)texture.resurce;
+                return (Texture)texture.resource;
 
-            texture = new TextureItem{
-                resurce = new Texture(AppDomain.CurrentDomain.BaseDirectory + path),
+            texture = new TextureItem
+            {
+                resource = new Texture(AppDomain.CurrentDomain.BaseDirectory + path),
                 path = path
             };
 
             resurce.Add(texture);
-            return (Texture)texture.resurce;
+            return (Texture)texture.resource;
         }
 
-        static public Font LoadFont(string path){
+        // Load a font
+        static public Font LoadFont(string path)
+        {
             FontItem font = (FontItem)resurce.FirstOrDefault(e => e.path == path);
 
             if (font != default)
-                return (Font)font.resurce;
+                return (Font)font.resource;
 
-            font = new FontItem{
-                resurce = new Font(AppDomain.CurrentDomain.BaseDirectory + path),
+            font = new FontItem
+            {
+                resource = new Font(AppDomain.CurrentDomain.BaseDirectory + path),
                 path = path
             };
 
             resurce.Add(font);
-            return (Font)font.resurce;
+            return (Font)font.resource;
         }
 
-        public static Texture GetTexture(char ch){
-            switch (ch){
+        // Get a texture based on character identifier
+        public static Texture GetTexture(char ch)
+        {
+            switch (ch)
+            {
                 case '0':
                     return LoadTexture(@"Resurces\Img\Walss\Wall.png");
                 case '1':

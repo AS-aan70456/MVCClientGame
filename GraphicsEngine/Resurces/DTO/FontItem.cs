@@ -6,6 +6,6 @@ namespace GraphicsEngine.Resurces.DTO{
         private Font font;
         public string path { get; set; }
 
-        public ObjectBase resurce { get { return font; } set { font = (Font)value; } }
+        public ObjectBase resource { get { return font; } set { font = (Font)value; } }
     }
 }

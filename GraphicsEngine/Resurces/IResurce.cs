@@ -1,8 +1,11 @@
-﻿using SFML;
+﻿using SFML; // Include the appropriate namespace for SFML
 
-namespace GraphicsEngine.Resurces{
-    interface IResurce{
-        public ObjectBase resurce { get; set; }
-        public string path { get; set; }
+namespace GraphicsEngine.Resurces
+{
+    // Interface for resource items
+    interface IResurce
+    {
+        ObjectBase resource { get; set; } // Actual resource object
+        string path { get; set; } // Path to the resource
     }
 }

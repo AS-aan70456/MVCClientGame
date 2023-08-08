@@ -5,38 +5,49 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Models.Dungeons{
+namespace Client.Models.Dungeons
+{
 
-    class Room{
+    // Represents a room within the dungeon
+    class Room
+    {
 
-        public Vector2i Position { get; set; }
-        public Vector2i Size { get; private set; }
-        public Vector2i Center { get { return(Position + (Size / 2)); } }
+        public Vector2i Position { get; set; } // The position of the room
+        public Vector2i Size { get; private set; } // The size of the room
+        public Vector2i Center { get { return (Position + (Size / 2)); } } // The center position of the room
 
-        public char[,] Structure { get; private set; }
+        public char[,] Structure { get; private set; } // The structure of the room (wall, floor, etc.)
 
-        public Room(){
+        public Room()
+        {
             Position = new Vector2i();
             Size = new Vector2i();
         }
 
-        public static Room GenerateRoom(Vector2i Size, Vector2i chankPos, int chankSize) {
+        // Generates a room with specified size and position within a chunk
+        public static Room GenerateRoom(Vector2i Size, Vector2i chankPos, int chankSize)
+        {
             Room room = new Room();
 
             room.Structure = new char[Size.X, Size.Y];
             room.Size = Size;
             room.Position = new Vector2i(chankPos.X + ((chankSize - Size.X) / 2), chankPos.Y + ((chankSize - Size.Y) / 2));
 
-            for (int i = 0; i < Size.Y; i++){
-                for (int j = 0; j < Size.X; j++){
-                    if (i == 0 || j == 0 || i == Size.Y - 1 || j == Size.X - 1){
+            // Fills the structure of the room with walls and floors
+            for (int i = 0; i < Size.Y; i++)
+            {
+                for (int j = 0; j < Size.X; j++)
+                {
+                    if (i == 0 || j == 0 || i == Size.Y - 1 || j == Size.X - 1)
+                    {
                         if ((i + j) % 5 != 0)
-                            room.Structure[j, i] = '1'; 
+                            room.Structure[j, i] = '1'; // Wall
                         else
-                            room.Structure[j, i] = '2';
+                            room.Structure[j, i] = '2'; // Door
                     }
-                    else{
-                        room.Structure[j, i] = ' ';
+                    else
+                    {
+                        room.Structure[j, i] = ' '; // Floor
                     }
                 }
             }
@@ -44,16 +55,20 @@ namespace Client.Models.Dungeons{
             return room;
         }
 
-        public bool CheckColisionRoom(List<Room> rooms) {
+        // Checks if the room is too close to any of the existing rooms
+        public bool CheckColisionRoom(List<Room> rooms)
+        {
             foreach (var room in rooms) if (TooCloseTo(room))
                     return true;
             return false;
         }
 
-        private bool TooCloseTo(Room room){
-            return ((Position.X > room.Position.X && Position.X < room.Position.X + room.Size.Y) || (room.Position.X > room.Position.X && Position.X < Position.X + Size.Y)) &&
-                ((Position.Y > room.Position.Y && Position.Y < room.Position.Y + room.Size.X) || (room.Position.Y > room.Position.Y && Position.Y < Position.Y + Size.X));
-                
+        // Checks if the room is too close to another room
+        private bool TooCloseTo(Room room)
+        {
+            return ((Position.X > room.Position.X && Position.X < room.Position.X + room.Size.Y) || (room.Position.X > Position.X && Position.X < Position.X + Size.Y)) &&
+                ((Position.Y > room.Position.Y && Position.Y < room.Position.Y + room.Size.X) || (room.Position.Y > Position.Y && Position.Y < Position.Y + Size.X));
+
         }
     }
 }

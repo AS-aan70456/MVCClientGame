@@ -3,17 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CoreEngine.ReyCast{
+namespace CoreEngine.ReyCast
+{
     // TDO Rey, reyservice into (controller, view)
-    class Rey : ReyContainer{
+    class Rey : ReyContainer
+    {
 
         private List<Hit> HitPoints { get; set; }
 
-        public Rey(){
+        public Rey()
+        {
             HitPoints = new List<Hit>();
         }
 
-        public static Rey HitDistribution(Rey reyHorizontal, Rey reyVertecal, ReySettings settings) {
+        // Combines the hits from two different rays and sorts them based on their distances.
+        public static Rey HitDistribution(Rey reyHorizontal, Rey reyVertecal, ReySettings settings)
+        {
             Rey resultRey = new Rey();
 
             int indexHorizontal = 0;
@@ -49,22 +54,25 @@ namespace CoreEngine.ReyCast{
             return resultRey;
         }
 
+        // Adds a hit to the list of hit points.
         public void Hit(Hit hit) =>
             HitPoints.Add(hit);
-        
+
+        // Returns the last hit of the specified type.
         public Hit GetLastHit(Hit type) =>
              (HitPoints.FindAll(hit => hit.GetType() == type.GetType()).Last());
 
+        // Returns the first hit of the specified type.
         public Hit GetFirstHit(Hit type) =>
              (HitPoints.FindAll(hit => hit.GetType() == type.GetType()).First());
 
-
+        // Returns all wall hits.
         public IEnumerable<Hit> GetWallHit() =>
              HitPoints.Where(hit => hit.GetType() == new HitWall().GetType());
-        
+
+        // Returns all floor hits.
         public IEnumerable<Hit> GetFloreHit() =>
              HitPoints.Where(hit => hit.GetType() == new HitFlore().GetType());
-
 
     }
 }

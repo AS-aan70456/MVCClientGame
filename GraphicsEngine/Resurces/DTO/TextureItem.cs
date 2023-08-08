@@ -6,6 +6,6 @@ namespace GraphicsEngine.Resurces.DTO{
         private Texture texture;
         public string path { get; set; }
 
-        public ObjectBase resurce { get { return texture; } set { texture = (Texture)value; } }
+        public ObjectBase resource { get { return texture; } set { texture = (Texture)value; } }
     }
 }

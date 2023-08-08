@@ -2,30 +2,37 @@
 using Client.Views;
 using SFML.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Client.Controllers{
-    class SettingController : IDrawController{
+namespace Client.Controllers
+{
+    // Controller for handling settings related to the game.
+    class SettingController : IDrawController
+    {
 
         SettingView View;
 
-        public void Activation(RenderWindow window){
-            View =  new SettingView(window);
+        // Activation method to initialize the controller.
+        public void Activation(RenderWindow window)
+        {
+            View = new SettingView(window);
         }
 
-        public void DizActivation(){
+        // Deactivation method to clean up resources.
+        public void DizActivation()
+        {
             View.DizActivation();
         }
 
-        public void Draw(){
+        // Draw method to render the settings view.
+        public void Draw()
+        {
             View.Render();
         }
 
-        public void Updata(){
-            
+        // Update method for handling settings updates.
+        public void Updata()
+        {
+            // Typically used to handle user input and settings changes.
         }
     }
 }

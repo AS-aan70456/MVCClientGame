@@ -6,9 +6,6 @@ namespace Server{
         static void Main(string[] args){
             Window window = new Window(new VideoMode(3, 3), "MVC_SFML");
 
-            
-
-
             Console.WriteLine("Hello World!");
         }
     }

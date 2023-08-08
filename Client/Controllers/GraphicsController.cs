@@ -8,15 +8,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Controllers{
+namespace Client.Controllers
+{
 
-    //Costile between sfml and my architecture
-    class GraphicsController{
+    // Graphics controller responsible for managing the rendering and window functionality.
+    class GraphicsController
+    {
         private RenderWindow window;
 
+        // The current game controller handling the scene.
         public IDrawController gameController { get; private set; }
         private Clock Clock;
 
+        // Properties for tracking window state.
         public bool IsOpen { get { return window.IsOpen; } }
         public float time { get; private set; }
         public float fps { get; private set; }
@@ -25,46 +29,61 @@ namespace Client.Controllers{
         private Time previousTime;
         private Time curentTime;
 
-        public  GraphicsController(){
+        // Constructor initializes the graphics controller.
+        public GraphicsController()
+        {
+            // Initialize the window based on configuration settings.
             if (Config.config.isFullScrean)
                 InitFullScrean();
             else
                 InitScrean();
 
+            // Set up the window event handler for closing.
             this.window.Closed += new EventHandler(Close);
 
+            // Initialize clocks for timing and FPS calculation.
             Clock = new Clock();
             clockFps = new Clock();
-
             previousTime = clockFps.ElapsedTime;
         }
 
-        public void UpdataWindow() {
+        // Set up the window event handler for updating window events.
+        public void UpdataWindow()
+        {
             this.window.Closed += new EventHandler(Close);
         }
 
-        public void SetController(IDrawController gameController) {
+        // Set the current game controller and activate it.
+        public void SetController(IDrawController gameController)
+        {
+            // Deactivate the previous controller, if exists.
             if (this.gameController != null)
                 this.gameController.DizActivation();
 
+            // Set the new game controller and activate it.
             this.gameController = gameController;
             this.gameController.Activation(window);
             Updata();
         }
 
-        //Updata scene
-        private void Updata() {
-            while (window.IsOpen) {
+        // Update the scene in a loop.
+        private void Updata()
+        {
+            while (window.IsOpen)
+            {
                 window.Clear();
 
+                // Calculate time elapsed since last frame.
                 time = Clock.ElapsedTime.AsMicroseconds();
                 time = time / 29000;
                 Clock.Restart();
 
+                // Calculate frames per second.
                 curentTime = clockFps.ElapsedTime;
                 fps = 1.0f / (curentTime.AsSeconds() - previousTime.AsSeconds());
                 previousTime = curentTime;
 
+                // Draw and update the game controller.
                 gameController.Draw();
                 gameController.Updata();
 
@@ -73,24 +92,28 @@ namespace Client.Controllers{
             }
         }
 
-        public void InitFullScrean(){
+        // Initialize the window in full-screen mode.
+        public void InitFullScrean()
+        {
             window?.Close();
             window = new RenderWindow(new VideoMode(480, 360), "MVC_SFML", Styles.Fullscreen);
             UpdataWindow();
             gameController?.Activation(window);
-
         }
 
-        public void InitScrean(){
+        // Initialize the window in windowed mode.
+        public void InitScrean()
+        {
             window?.Close();
             window = new RenderWindow(new VideoMode(1080, 720), "MVC_SFML", Styles.Close);
             UpdataWindow();
             gameController?.Activation(window);
         }
 
-        private void Close(object sender, EventArgs @event) {
+        // Event handler for closing the window.
+        private void Close(object sender, EventArgs @event)
+        {
             window.Close();
         }
-
     }
 }

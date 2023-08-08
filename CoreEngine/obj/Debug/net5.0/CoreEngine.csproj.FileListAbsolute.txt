@@ -9,3 +9,15 @@ C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Debug
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Debug\net5.0\CoreEngine.dll
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Debug\net5.0\ref\CoreEngine.dll
 C:\Users\User\Desktop\Prodject complite\MVCClientServerGame\CoreEngine\obj\Debug\net5.0\CoreEngine.pdb
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\bin\Debug\net5.0\CoreEngine.deps.json
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\bin\Debug\net5.0\CoreEngine.dll
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\bin\Debug\net5.0\CoreEngine.pdb
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\obj\Debug\net5.0\CoreEngine.csproj.AssemblyReference.cache
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\obj\Debug\net5.0\CoreEngine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\obj\Debug\net5.0\CoreEngine.AssemblyInfoInputs.cache
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\obj\Debug\net5.0\CoreEngine.AssemblyInfo.cs
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\obj\Debug\net5.0\CoreEngine.csproj.CoreCompileInputs.cache
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\obj\Debug\net5.0\CoreEngine.dll
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\obj\Debug\net5.0\refint\CoreEngine.dll
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\obj\Debug\net5.0\CoreEngine.pdb
+C:\Users\deen7\Desktop\Released\MVCClientGame\CoreEngine\obj\Debug\net5.0\ref\CoreEngine.dll
